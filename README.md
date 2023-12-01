@@ -123,10 +123,16 @@ $ forge coverage
 
 ### Deploy
 
-Deploy to Anvil:
+Deploy Blooby to Anvil:
 
 ```sh
-$ forge script script/Deploy.s.sol --broadcast --fork-url http://localhost:8545
+$ forge script script/BloobyDeploy.s.sol --broadcast --fork-url http://localhost:8545
+```
+
+Create a Blooby:
+
+```sh
+forge script script/CreateBlooby.s.sol --sig "tokenURI(address bloobyAddr, uint256 index)" "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0" 0 --fork-url http://localhost:8545 --broadcast
 ```
 
 For this script to work, you need to have a `MNEMONIC` environment variable set to a valid

@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: MIT
+pragma solidity 0.8.21;
+
 import { ERC721A } from "ERC721A/ERC721A.sol";
 import { Encoder } from "./Encoder.sol";
 
