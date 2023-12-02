@@ -8,7 +8,6 @@ import { StdCheats } from "forge-std/StdCheats.sol";
 import { Blooby } from "../src/Blooby.sol";
 import { Background } from "../src/layers/Background.sol";
 
-
 /// @dev If this is your first time with Forge, read this tutorial in the Foundry Book:
 /// https://book.getfoundry.sh/forge/writing-tests
 contract BloobyTest is PRBTest, StdCheats {
@@ -17,12 +16,7 @@ contract BloobyTest is PRBTest, StdCheats {
     /// @dev A function invoked before each test case is run.
     function setUp() public virtual {
         // Instantiate the contract-under-test.
-        Background backgraound = new Background();
-        uint16[] memory itemIds = new uint16[](1);
-        itemIds[0] = 0;
-        address[] memory itemAddresses = new address[](1);
-        itemAddresses[0] = address(backgraound);
-        blooby = new Blooby(itemIds, itemAddresses);
+        blooby = new Blooby();
     }
 
     /// @dev Basic test. Run it with `forge test -vvv` to see the console log.
