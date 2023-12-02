@@ -5,6 +5,7 @@ import { ERC721A } from "ERC721A/ERC721A.sol";
 import { Encoder } from "./Encoder.sol";
 import { Owned } from "solmate/auth/Owned.sol";
 import { ILayer } from "./interfaces/ILayer.sol";
+import { console2 } from "forge-std/console2.sol";
 
 contract Blooby is Owned, ERC721A {
     using Encoder for string;
@@ -26,12 +27,13 @@ contract Blooby is Owned, ERC721A {
         Owned(msg.sender)
         ERC721A("Blooby", "BLOOBY")
     {
-        if (_itemIds.length == _itemAddresses.length) {
+        if (_itemIds.length != _itemAddresses.length) {
             revert InitItemsMismatch();
         }
         for (uint256 i = 0; i < _itemIds.length; i++) {
             itemById[_itemIds[i]] = _itemAddresses[i];
         }
+
         itemIds = _itemIds;
     }
 
@@ -45,7 +47,7 @@ contract Blooby is Owned, ERC721A {
         for (uint256 i = 0; i < itemIds.length; i++) {
             address itemAddress = itemById[itemIds[i]];
             ILayer layer = ILayer(itemAddress);
-            string memory itemSvg = layer.generate(0);
+            string memory itemSvg = layer.generate(8);
             svg = string(abi.encodePacked(svg, itemSvg));
         }
 
