@@ -8,8 +8,6 @@ contract Eyes {
     using String for uint256;
     using String for int256;
 
-    error InvalidEyesDna();
-
     function eyes(
         uint256 size,
         uint256 dnaEyesLayer,
@@ -20,14 +18,11 @@ contract Eyes {
         pure
         returns (string memory)
     {
-        if (dnaEyesLayer >= 10) {
-            revert InvalidEyesDna();
-        }
+        require(size > 9, "Invalid Eyes Size");
+        require(dnaEyesLayer > 0 && dnaEyesLayer < 10, "Invalid Eyes DNA");
 
-        uint256 randNum = dnaEyesLayer * 10;
         (int256 positionX, int256 positionY) = generatePositions(randPositionX, randPositionY);
-
-        if (randNum < 5) {
+        if (dnaEyesLayer < 5) {
             return string(
                 abi.encodePacked(
                     '<g id="eye" transform = "translate(50, 50)"><circle id="iris" cx="0" cy="0" r="',
@@ -42,7 +37,8 @@ contract Eyes {
                 )
             );
         } else {
-            int256 pupilSize = calculatePupilSize(size, dnaEyesLayer);
+            uint256 scaledDnaEyesLayer = (dnaEyesLayer * 100) / 10;
+            uint256 pupilSize = calculatePupilSize(size, scaledDnaEyesLayer);
             return string(
                 abi.encodePacked(
                     '<g><g transform = "translate(38, 50)"><circle cx="0" cy="0" r="',
@@ -52,7 +48,7 @@ contract Eyes {
                     '" cy="',
                     positionY.int2str(),
                     '" r="',
-                    pupilSize.int2str(),
+                    pupilSize.uint2str(),
                     '" fill="#000"></circle></g><g transform = "translate(58, 50)"><circle cx="0" cy="0" r="',
                     size.uint2str(),
                     '" stroke="#000" stroke-width="2" fill="#fff"></circle><circle cx="',
@@ -60,7 +56,7 @@ contract Eyes {
                     '" cy="',
                     positionY.int2str(),
                     '" r="',
-                    pupilSize.int2str(),
+                    pupilSize.uint2str(),
                     '" fill="#000"></circle></g></g>'
                 )
             );
@@ -73,7 +69,12 @@ contract Eyes {
         return (generatedX, generatedY);
     }
 
-    function calculatePupilSize(uint256 size, uint256 dnaEyesLayer) internal pure returns (int256) {
-        return int256(dnaEyesLayer) * (int256(size) / 3 - 3) + 3;
+    function calculatePupilSize(uint256 size, uint256 dnaEyesLayer) internal pure returns (uint256) {
+        uint256 minValue = 3 * 100;
+        uint256 maxValue = (size / 3) * 100;
+
+        uint256 scaledRandom = (dnaEyesLayer * (maxValue - minValue) / 100) + minValue;
+
+        return (scaledRandom + 100 / 2) / 100;
     }
 }
