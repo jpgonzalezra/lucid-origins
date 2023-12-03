@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: GNU GPLv3
 pragma solidity >=0.8.21 <0.9.0;
 
 import { PRBTest } from "@prb/test/PRBTest.sol";
