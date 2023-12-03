@@ -7,8 +7,9 @@ import { Owned } from "solmate/auth/Owned.sol";
 // import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
 import { Eyes } from "./layers/Eyes.sol";
+import { Blob } from "./layers/Blob.sol";
 
-contract Blooby is Owned, ERC721A, Background, Eyes {
+contract Blooby is Owned, ERC721A, Background, Eyes, Blob {
     using Encoder for string;
 
     error InitItemsMismatch();
@@ -22,10 +23,11 @@ contract Blooby is Owned, ERC721A, Background, Eyes {
             '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">\n';
 
         string memory background = this.background(10);
-        string memory eyes = this.eyes(7, 8, 5, 4);
+        string memory eyes = this.eyes(10, 8, 5, 4);
+        string memory bloob = this.blob(96, 5, 6, 5);
         string memory footer = "</svg>";
 
-        string memory svg = string(abi.encodePacked(header, background, eyes, footer));
+        string memory svg = string(abi.encodePacked(header, background, bloob, eyes, footer));
 
         return metadata(name, description, svg);
     }
