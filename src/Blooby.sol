@@ -24,7 +24,8 @@ contract Blooby is Owned, ERC721A, Background, Eyes, Blob {
 
         string memory background = this.background(10);
         string memory eyes = this.eyes(10, 8, 5, 4);
-        string memory bloob = this.blob(96, 5, 6, 5);
+
+        string memory bloob = this.blob(96, 1, 6, 8);
         string memory footer = "</svg>";
 
         string memory svg = string(abi.encodePacked(header, background, bloob, eyes, footer));
