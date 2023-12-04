@@ -4,6 +4,7 @@ pragma solidity 0.8.21;
 // import { console2 } from "forge-std/console2.sol";
 import { String } from "../utils/String.sol";
 import { Colors } from "../utils/Colors.sol";
+import { MathLibrary } from "../utils/MathLibrary.sol";
 import { Trigonometry } from "solidity-trigonometry/Trigonometry.sol";
 
 contract Blob is Colors {
@@ -44,6 +45,7 @@ contract Blob is Colors {
 
     function createPoints(uint256 size, uint256 minGrowth, uint256 edgesNum) internal view returns (Point[] memory) {
         Point[] memory points = new Point[](edgesNum);
+
         uint256 outerRad = size / 2;
         uint256 innerRad = minGrowth * (outerRad / 10);
         uint256 center = size / 2;
@@ -51,27 +53,30 @@ contract Blob is Colors {
 
         for (uint256 i = 0; i < edgesNum; i++) {
             uint256 degree = i * deg;
-            uint256 radius = randPoint(innerRad, outerRad);
-            points[i] = calculatePoint(center, radius, degree);
+            uint256 radius = randPoint(i, innerRad, outerRad);
+            Point memory point = calculatePoint(center, radius, degree);
+            points[i] = point;
         }
 
         return points;
     }
 
-    function randPoint(uint256 minv, uint256 maxv) internal view returns (uint256) {
-        // Simple randomization.
-        uint256 random = uint256(keccak256(abi.encodePacked(block.timestamp, minv, maxv))) % maxv;
-        return (random >= minv) ? random : minv + (random % (maxv - minv));
-    }
-
     function calculatePoint(uint256 origin, uint256 radius, uint256 degree) internal pure returns (Point memory) {
-        int256 cosValue = (degree * Trigonometry.PI / 180).cos() / 1e18;
-        int256 sinValue = (degree * Trigonometry.PI / 180).sin() / 1e18;
+        uint256 scaledDegree = degree * 1e18;
+        uint256 scaledPI = Trigonometry.PI;
 
-        int256 x = int256(origin) + int256(radius) * cosValue;
-        int256 y = int256(origin) + int256(radius) * sinValue;
+        int256 cosValue = uint256(scaledDegree * scaledPI / 180 / 1e18).cos();
+        int256 sinValue = (scaledDegree * scaledPI / 180 / 1e18).sin();
+
+        int256 x = int256(origin) + int256(radius) * cosValue / 1e18;
+        int256 y = int256(origin) + int256(radius) * sinValue / 1e18;
 
         return Point(x, y);
+    }
+
+    function randPoint(uint256 i, uint256 minv, uint256 maxv) internal view returns (uint256) {
+        uint256 random = uint256(keccak256(abi.encodePacked(block.number, block.timestamp, i, minv, maxv))) % maxv;
+        return (random >= minv) ? random : minv + (random % (maxv - minv));
     }
 
     function createSvgPath(Point[] memory points) internal pure returns (string memory) {
