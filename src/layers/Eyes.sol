@@ -14,13 +14,10 @@ contract Eyes {
         uint256 randPositionX,
         uint256 randPositionY
     )
-        external
+        internal
         pure
         returns (string memory)
     {
-        require(size > 0, "Invalid Eyes Size");
-        require(dnaEyesLayer > 0 && dnaEyesLayer < 10, "Invalid Eyes DNA");
-
         (int256 positionX, int256 positionY) = generatePositions(randPositionX, randPositionY);
         if (dnaEyesLayer < 5) {
             return string(
