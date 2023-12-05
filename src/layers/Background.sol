@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GNU GPLv3
 pragma solidity 0.8.21;
 
+// import { console2 } from "forge-std/console2.sol";
+
 contract Background {
-    error InvalidBackgroundDna();
 
     string[] bgColors = [
         "#FAF4EF",
@@ -28,9 +29,6 @@ contract Background {
     ];
 
     function background(uint256 dnaBgLayer) external view returns (string memory) {
-        if (dnaBgLayer >= bgColors.length) {
-            revert InvalidBackgroundDna();
-        }
         return
             string(abi.encodePacked('<rect x="0" y="0" width="100" height="100" fill="', bgColors[dnaBgLayer], '"/>'));
     }

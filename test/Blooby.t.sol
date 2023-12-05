@@ -21,6 +21,17 @@ contract BloobyTest is PRBTest, StdCheats {
 
     /// @dev Basic test. Run it with `forge test -vvv` to see the console log.
     function test_Example() external {
+        // string memory alchemyApiKey = vm.envOr("API_KEY_ALCHEMY", string(""));
+        // if (bytes(alchemyApiKey).length == 0) {
+        //     return;
+        // }
+
+        // // Otherwise, run the test against the mainnet fork.
+        // vm.createSelectFork({ urlOrAlias: "mainnet", blockNumber: 16_428_000 });
         console2.log(blooby.tokenURI(1));
+        console2.log(blooby.tokenURI(2));
+        console2.log(blooby.tokenURI(3));
+        console2.log(blooby.tokenURI(4));
+        console2.log(blooby.tokenURI(5));
     }
 }

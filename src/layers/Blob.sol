@@ -3,7 +3,6 @@ pragma solidity 0.8.21;
 
 // import { console2 } from "forge-std/console2.sol";
 import { String } from "../utils/String.sol";
-import { MathLibrary } from "../utils/MathLibrary.sol";
 import { Trigonometry } from "solidity-trigonometry/Trigonometry.sol";
 
 contract Blob {
@@ -17,8 +16,6 @@ contract Blob {
     using Trigonometry for uint256;
 
     function blob(uint256 size, uint256 minGrowth, uint256 edgesNum) external view returns (string memory) {
-        require(size >= 95 && size <= 105, "Invalid Blob Size");
-
         Point[] memory points = createPoints(size, minGrowth, edgesNum);
         return createSvgPath(points);
     }
