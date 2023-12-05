@@ -18,7 +18,7 @@ contract Eyes {
         pure
         returns (string memory)
     {
-        require(size > 9, "Invalid Eyes Size");
+        require(size > 0, "Invalid Eyes Size");
         require(dnaEyesLayer > 0 && dnaEyesLayer < 10, "Invalid Eyes DNA");
 
         (int256 positionX, int256 positionY) = generatePositions(randPositionX, randPositionY);
@@ -26,13 +26,13 @@ contract Eyes {
             return string(
                 abi.encodePacked(
                     '<g id="eye" transform = "translate(50, 50)"><circle id="iris" cx="0" cy="0" r="',
-                    size,
+                    size.uint2str(),
                     '" stroke="#000" stroke-width="2" fill="#fff"></circle><circle id="pupil" cx="',
-                    positionX,
+                    positionX.int2str(),
                     '" cy="',
-                    positionY,
+                    positionY.int2str(),
                     '" r="',
-                    size / 2,
+                    (size / 2).uint2str(),
                     '" fill="#000"></circle></g>'
                 )
             );

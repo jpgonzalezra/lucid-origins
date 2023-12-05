@@ -6,10 +6,11 @@ import { Encoder } from "./Encoder.sol";
 import { Owned } from "solmate/auth/Owned.sol";
 // import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
+import { Colors } from "./utils/Colors.sol";
 import { Eyes } from "./layers/Eyes.sol";
 import { Blob } from "./layers/Blob.sol";
 
-contract Blooby is Owned, ERC721A, Background, Eyes, Blob {
+contract Blooby is Owned, ERC721A, Background, Eyes, Blob, Colors {
     using Encoder for string;
 
     error InitItemsMismatch();
@@ -23,12 +24,24 @@ contract Blooby is Owned, ERC721A, Background, Eyes, Blob {
             '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">\n';
 
         string memory background = this.background(10);
-        string memory eyes = this.eyes(9, 8, 5, 4);
-
-        string memory bloob = this.blob(105, 5, 8, 8);
+        string memory eyes = this.eyes(9, 3, 2, 5);
+        string memory blob = this.blob(105, 5, 6);
+        string memory body = string(
+            abi.encodePacked('<path stroke="transparent" stroke-width="0" fill = "', colors[5], '" d="', blob, 'Z" />')
+        );
+        string memory stroke = string(
+            abi.encodePacked(
+                '<path transform="translate(-3, -3)" stroke="#000" stroke-width="2" fill = "none" d="', blob, '" />'
+            )
+        );
+        string memory blush = string(
+            abi.encodePacked(
+                '<g><circle  transform = "translate(70, 65)" cx="0" cy="0" r="6" fill="rgba(255,255,255,0.4)" ></circle><circle  transform = "translate(30, 65)" cx="0" cy="0" r="6" fill="rgba(255,255,255,0.4)"></circle></g>'
+            )
+        );
         string memory footer = "</svg>";
 
-        string memory svg = string(abi.encodePacked(header, background, bloob, eyes, footer));
+        string memory svg = string(abi.encodePacked(header, background, body, blush, stroke, eyes, footer));
 
         return metadata(name, description, svg);
     }

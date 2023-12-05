@@ -3,11 +3,10 @@ pragma solidity 0.8.21;
 
 // import { console2 } from "forge-std/console2.sol";
 import { String } from "../utils/String.sol";
-import { Colors } from "../utils/Colors.sol";
 import { MathLibrary } from "../utils/MathLibrary.sol";
 import { Trigonometry } from "solidity-trigonometry/Trigonometry.sol";
 
-contract Blob is Colors {
+contract Blob {
     struct Point {
         int256 x;
         int256 y;
@@ -17,30 +16,11 @@ contract Blob is Colors {
     using String for uint256;
     using Trigonometry for uint256;
 
-    function blob(
-        uint256 size,
-        uint256 minGrowth,
-        uint256 edgesNum,
-        uint256 randColorIndex
-    )
-        external
-        view
-        returns (string memory)
-    {
+    function blob(uint256 size, uint256 minGrowth, uint256 edgesNum) external view returns (string memory) {
         require(size >= 95 && size <= 105, "Invalid Blob Size");
-        require(randColorIndex < colors.length, "Invalid Blob randColorIndex");
 
         Point[] memory points = createPoints(size, minGrowth, edgesNum);
-
-        return string(
-            abi.encodePacked(
-                '<path stroke="transparent" stroke-width="0" fill = "',
-                colors[randColorIndex],
-                '" d="',
-                createSvgPath(points),
-                'Z" />'
-            )
-        );
+        return createSvgPath(points);
     }
 
     function createPoints(uint256 size, uint256 minGrowth, uint256 edgesNum) internal view returns (Point[] memory) {
