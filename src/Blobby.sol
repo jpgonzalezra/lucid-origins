@@ -10,16 +10,14 @@ import { Colors } from "./utils/Colors.sol";
 import { Eyes } from "./layers/Eyes.sol";
 import { Blob } from "./layers/Blob.sol";
 
-contract Blooby is Owned, ERC721A, Background, Eyes, Blob, Colors {
+contract Blobby is Owned, ERC721A, Background, Eyes, Blob, Colors {
     using Encoder for string;
 
-    error InitItemsMismatch();
-
-    constructor() Owned(msg.sender) ERC721A("Blooby", "BLOOBY") { }
+    constructor() Owned(msg.sender) ERC721A("Blobby", "BLOBBY") { }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        string memory name = string(abi.encodePacked("Blooby #", tokenId));
-        string memory description = "Blooby, fully on-chain NFT";
+        string memory name = string(abi.encodePacked("Blobby #", tokenId));
+        string memory description = "Blobby, fully on-chain NFT";
         string memory header =
             '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">\n';
 
