@@ -11,17 +11,17 @@ import { Eyes } from "./layers/Eyes.sol";
 import { Blob } from "./layers/Blob.sol";
 import { String } from "./utils/String.sol";
 
-contract Blobby is Owned, ERC721A, Background, Eyes, Blob, Colors {
+contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
     using Encoder for string;
     using String for string;
 
-    constructor() Owned(msg.sender) ERC721A("Blobby", "BLOBBY") { }
+    constructor() Owned(msg.sender) ERC721A("LucidBlob", "LucidBlob") { }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         uint16[] memory dna = getDna(uint256(keccak256(abi.encodePacked(tokenId))));
 
-        string memory name = string(abi.encodePacked("Blobby #", tokenId));
-        string memory description = "Blobby, fully on-chain NFT";
+        string memory name = string(abi.encodePacked("LucidBlob #", tokenId));
+        string memory description = "LucidBlob, fully on-chain NFT";
         string memory header =
             '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">\n';
 

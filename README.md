@@ -123,10 +123,10 @@ $ forge coverage
 
 ### Deploy
 
-Deploy Blobby to Anvil:
+Deploy LucidBlob to Anvil:
 
 ```sh
-$ forge script script/BlobbyDeploy.s.sol --broadcast --fork-url http://localhost:8545
+$ forge script script/LucidBlobDeploy.s.sol --broadcast --fork-url http://localhost:8545
 ```
 
 For this script to work, you need to have a `MNEMONIC` environment variable set to a valid
