@@ -6,7 +6,7 @@ import { Background } from "../src/layers/Background.sol";
 import { BaseScript } from "./Base.s.sol";
 
 /// @dev See the Solidity Scripting tutorial: https://book.getfoundry.sh/tutorials/solidity-scripting
-contract BloobyDeploy is BaseScript {
+contract BlobbyDeploy is BaseScript {
     function run() public broadcast returns (Blobby blooby) {
         blooby = new Blobby();
     }

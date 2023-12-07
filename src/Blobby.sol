@@ -25,8 +25,8 @@ contract Blobby is Owned, ERC721A, Background, Eyes, Blob, Colors {
         string memory header =
             '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">\n';
 
-        string memory background = this.background(normalizeToRange(dna[0], 0, 19));
-        string memory eyes = this.eyes(
+        string memory background = background(normalizeToRange(dna[0], 0, 19));
+        string memory eyes = eyes(
             normalizeToRange(dna[1], 9, 13),
             normalizeToRange(dna[2], 0, 9),
             normalizeToRange(dna[3], 2, 8),
@@ -34,7 +34,7 @@ contract Blobby is Owned, ERC721A, Background, Eyes, Blob, Colors {
         );
 
         string memory blob =
-            this.blob(normalizeToRange(dna[5], 95, 105), normalizeToRange(dna[6], 5, 9), normalizeToRange(dna[7], 6, 9));
+            blob(normalizeToRange(dna[5], 95, 105), normalizeToRange(dna[6], 5, 9), normalizeToRange(dna[7], 6, 9));
         string memory body = string(
             abi.encodePacked(
                 '<path stroke="transparent" stroke-width="0" fill = "',

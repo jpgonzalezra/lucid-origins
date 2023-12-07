@@ -29,6 +29,6 @@ contract Background {
 
     function background(uint256 dnaBgLayer) internal view returns (string memory) {
         return
-            string(abi.encodePacked('<rect x="0" y="0" width="100" height="100" fill="', bgColors[dnaBgLayer], '"/>'));
+            string(abi.encodePacked('<rect x="0" y="0" width="100" height="100" fill="', bgColors[dnaBgLayer], '"/>\n'));
     }
 }
