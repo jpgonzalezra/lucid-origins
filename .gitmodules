@@ -1,17 +1,17 @@
-[submodule "lib/forge-std"]
+[submodule "packages/contracts/lib/forge-std"]
   branch = "v1"
-  path = "lib/forge-std"
+  path = "packages/contracts/lib/forge-std"
   url = "https://github.com/foundry-rs/forge-std"
-[submodule "lib/prb-test"]
+[submodule "packages/contracts/lib/prb-test"]
   branch = "release-v0"
-  path = "lib/prb-test"
+  path = "packages/contracts/lib/prb-test"
   url = "https://github.com/PaulRBerg/prb-test"
-[submodule "lib/ERC721A"]
-	path = lib/ERC721A
+[submodule "packages/contracts/lib/ERC721A"]
+	path = packages/contracts/lib/ERC721A
 	url = https://github.com/chiru-labs/ERC721A
-[submodule "lib/solmate"]
-	path = lib/solmate
+[submodule "packages/contracts/lib/solmate"]
+	path = packages/contracts/lib/solmate
 	url = https://github.com/transmissions11/solmate
-[submodule "lib/solidity-trigonometry"]
-	path = lib/solidity-trigonometry
+[submodule "packages/contracts/lib/solidity-trigonometry"]
+	path = packages/contracts/lib/solidity-trigonometry
 	url = https://github.com/mds1/solidity-trigonometry

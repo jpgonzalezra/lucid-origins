@@ -1,8 +1,5 @@
 # directories
-cache
-coverage
 node_modules
-out
 
 # files
 *.env
@@ -11,10 +8,3 @@ out
 .pnp.*
 lcov.info
 yarn.lock
-
-# broadcasts
-!broadcast
-broadcast/*
-broadcast/*/31337/
-
-output.svg
