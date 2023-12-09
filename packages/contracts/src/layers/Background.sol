@@ -4,7 +4,7 @@ pragma solidity 0.8.21;
 // import { console2 } from "forge-std/console2.sol";
 
 contract Background {
-    string[] public immutable BG_COLOR = [
+    string[20] internal bgColors = [
         "#FAF4EF",
         "#EFFAEF",
         "#EFF4FA",
@@ -29,6 +29,6 @@ contract Background {
 
     function background(uint256 dnaBgLayer) internal view returns (string memory) {
         return
-            string(abi.encodePacked('<rect x="0" y="0" width="100" height="100" fill="', BG_COLOR[dnaBgLayer], '"/>'));
+            string(abi.encodePacked('<rect x="0" y="0" width="100" height="100" fill="', bgColors[dnaBgLayer], '"/>'));
     }
 }

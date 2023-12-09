@@ -29,7 +29,7 @@ lerna-debug.log*
 *.sw?
 stats.html
 
-# packages/contract specific
+# packages/contracts specific
 packages/contracts/cache/
 packages/contracts/coverage/
 packages/contracts/out/
