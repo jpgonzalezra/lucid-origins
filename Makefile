@@ -1,5 +1,5 @@
 CONTRACTS_DIR := packages/contracts
-APP_DIR := packages/app
+APP_DIR := apps/web
 ABI_DIR := $(APP_DIR)/src/config/abis
 CONTRACT_NAME := LucidBlob
 DEPLOY_SCRIPT_DIR := packages/contracts/broadcast/LucidBlobDeploy.s.sol

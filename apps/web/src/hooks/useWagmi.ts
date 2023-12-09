@@ -4,9 +4,8 @@ import { useWagmiContract } from './useContract'
 
 function extractSVGContent(inputString?: string) {
   if (!inputString) return null
-  const regex = /<svg.*?svg>/
-  const match = JSON.stringify(inputString).match(regex)
-  return match ? match[0].replaceAll('\n', '').replaceAll('\\', '') : null
+  const decodedInput = JSON.parse(atob(inputString.replace(/^data:\w+\/\w+;base64,/, '')))
+  return decodedInput?.image
 }
 
 export const useWagmi = (tokenIds: bigint[]): string[] => {

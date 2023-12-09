@@ -36,5 +36,5 @@ packages/contracts/out/
 packages/contracts/broadcast/*
 packages/contracts/broadcast/*/31337/
 
-# packages/app specific
-packages/app/logs/
+# apps/web specific
+apps/web/logs/

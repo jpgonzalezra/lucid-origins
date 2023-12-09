@@ -88,7 +88,7 @@ const Home = () => {
                   <CardDescription>Instant blob engine</CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                  <img src={`data:image/svg+xml;utf8,${encodeURIComponent(blob)}`} />
+                  <img src={blob} />
                 </CardContent>
               </Card>
             </div>
