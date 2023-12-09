@@ -8,3 +8,7 @@ node_modules
 .pnp.*
 lcov.info
 yarn.lock
+out
+cache
+broadcast
+.bak

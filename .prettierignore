@@ -1,0 +1,10 @@
+.changeset
+coverage
+dist
+node_modules
+out
+broadcast
+cache
+lib
+.bak
+.sol
