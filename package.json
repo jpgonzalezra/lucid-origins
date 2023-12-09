@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "make": "make all",
     "contract:deploy": "pnpm make && prettier --write \"packages/app/src/config/abis/*.{js,jsx,ts,tsx,json}\"",
-    "lint": "turbo run lint && pnpm lint:format",
+    "lint": "turbo run lint",
     "types:check": "turbo run types:check"
   },
   "keywords": [],
