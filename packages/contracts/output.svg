@@ -1,6 +1,0 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
-<rect x="0" y="0" width="100" height="100" fill="#FAF4EF"/>
-<path stroke="transparent" stroke-width="0" fill = "#6B7AA1" d="M83,65Q85,79,71,84Q57,89,45,85Q34,81,20,74Q7,67,13,53Q20,40,25,26Q30,13,44,10Q58,7,69,16Q81,26,81,38Q81,51,83,65ZZ" /><g><circle  transform = "translate(70, 65)" cx="0" cy="0" r="6" fill="rgba(255,255,255,0.4)" ></circle><circle  transform = "translate(30, 65)" cx="0" cy="0" r="6" fill="rgba(255,255,255,0.4)"></circle></g>
-<path transform="translate(-3, -3)" stroke="#000" stroke-width="2" fill = "none" d="M83,65Q85,79,71,84Q57,89,45,85Q34,81,20,74Q7,67,13,53Q20,40,25,26Q30,13,44,10Q58,7,69,16Q81,26,81,38Q81,51,83,65Z" />
-<g id="eye" transform = "translate(50, 50)"><circle  id="iris" cx="0" cy="0" r="13" stroke="#000" stroke-width="2" fill="#fff"></circle><circle id="pupil" cx="0" cy="0" r="6" fill="#000"></circle></g>
-</svg>
