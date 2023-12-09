@@ -22,9 +22,9 @@
   "scripts": {
     "clean": "rm -rf cache out",
     "build": "forge build",
-    "lint": "pnpm lint:sol && pnpm prettier:check",
+    "lint": "pnpm lint:sol && pnpm prettier:format && pnpm prettier:write",
     "lint:sol": "forge fmt --check && pnpm solhint {script,src,test}/**/*.sol",
-    "prettier:check": "prettier --check **/*.{json,md,yml} --ignore-path=.prettierignore",
+    "prettier:format": "prettier --check **/*.{json,md,yml} --ignore-path=.prettierignore",
     "prettier:write": "prettier --write **/*.{json,md,yml} --ignore-path=.prettierignore",
     "test": "forge test",
     "test:coverage": "forge coverage",

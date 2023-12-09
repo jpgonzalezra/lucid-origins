@@ -3,9 +3,22 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "make": "make all",
+    "contract:deploy": "pnpm make && prettier --write \"apps/web/src/config/abis/*.{js,jsx,ts,tsx,json}\"",
+    "lint": "turbo run lint",
+    "types:check": "turbo run types:check"
   },
   "keywords": [],
-  "author": "jpgonzalezra",
-  "license": "MIT"
+  "author": "jpgonzalezra & 0xHermit",
+  "license": "MIT",
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "turbo": "^1.8.3",
+    "typescript": "^5.0.2",
+    "prettier": "^2.7.1",
+    "commitlint": "18.4.3"
+  }
 }

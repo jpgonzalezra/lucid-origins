@@ -1,8 +1,9 @@
 CONTRACTS_DIR := packages/contracts
-APP_DIR := packages/app
-ABI_DIR := $(APP_DIR)/abis
+APP_DIR := apps/web
+ABI_DIR := $(APP_DIR)/src/config/abis
 CONTRACT_NAME := LucidBlob
 DEPLOY_SCRIPT_DIR := packages/contracts/broadcast/LucidBlobDeploy.s.sol
+JSON_FILE := $(CONTRACTS_DIR)/out/$(CONTRACT_NAME).sol/$(CONTRACT_NAME).json
 ANVIL := 31337
 
 all: build move_abi deploy_contract_anvil update_env
@@ -14,7 +15,9 @@ build:
 move_abi:
 	@echo "Moving abi to apps..."
 	mkdir -p $(ABI_DIR)
-	cp $(CONTRACTS_DIR)/out/$(CONTRACT_NAME).sol/$(CONTRACT_NAME).json $(ABI_DIR)/
+	cat $(JSON_FILE) | python3 -c "import json,sys;obj=json.load(sys.stdin); print('export default', obj['abi'], 'as const');" > $(ABI_DIR)/$(CONTRACT_NAME).ts
+	sed -i .bak 's/True/true/g' $(ABI_DIR)/$(CONTRACT_NAME).ts
+	sed -i .bak 's/False/false/g' $(ABI_DIR)/$(CONTRACT_NAME).ts
 
 deploy_contract_anvil:
 	@echo "Deploying..."
@@ -27,10 +30,10 @@ update_env:
 	if [ ! -f $(APP_DIR)/.env ]; then \
 		touch $(APP_DIR)/.env; \
 	fi
-	if grep -q "LUCID_BLOB_ADDRESS" $(APP_DIR)/.env; then \
-		sed -i '' 's/LUCID_BLOB_ADDRESS=.*/LUCID_BLOB_ADDRESS='"$(CONTRACT_ADDRESS)"'/' $(APP_DIR)/.env; \
+	if grep -q "VITE_LUCID_BLOB_ADDRESS" $(APP_DIR)/.env; then \
+		sed -i '' 's/VITE_LUCID_BLOB_ADDRESS=.*/VITE_LUCID_BLOB_ADDRESS='"$(CONTRACT_ADDRESS)"'/' $(APP_DIR)/.env; \
 	else \
-		echo "LUCID_BLOB_ADDRESS=$(CONTRACT_ADDRESS)" >> $(APP_DIR)/.env; \
+		echo "VITE_LUCID_BLOB_ADDRESS=$(CONTRACT_ADDRESS)" >> $(APP_DIR)/.env; \
 	fi
 
 

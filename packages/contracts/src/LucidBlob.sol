@@ -14,16 +14,16 @@ import { String } from "./utils/String.sol";
 contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
     using Encoder for string;
     using String for string;
+    using String for uint256;
 
     constructor() Owned(msg.sender) ERC721A("LucidBlob", "LucidBlob") { }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         uint16[] memory dna = getDna(uint256(keccak256(abi.encodePacked(tokenId))));
 
-        string memory name = string(abi.encodePacked("LucidBlob #", tokenId));
+        string memory name = string(abi.encodePacked("LucidBlob #", tokenId.uint2str()));
         string memory description = "LucidBlob, fully on-chain NFT";
-        string memory header =
-            '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">\n';
+        string memory header = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">';
 
         string memory background = background(normalizeToRange(dna[0], 0, 19));
         string memory eyes = eyes(
@@ -76,13 +76,11 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
                 '","description":"',
                 desciption,
                 '","image": "data:image/svg+xml;base64,',
-                // Encoder.base64(bytes(svg)),
-                svg,
+                Encoder.base64(bytes(svg)),
                 '"}'
             )
         );
-        // return string(abi.encodePacked("data:application/json;base64,", Encoder.base64(bytes(json))));
-        return string(abi.encodePacked("data:application/json;base64,", json));
+        return string(abi.encodePacked("data:application/json;base64,", Encoder.base64(bytes(json))));
     }
 
     function getDna(uint256 preDna) internal pure returns (uint16[] memory) {

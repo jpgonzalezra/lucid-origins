@@ -2,7 +2,7 @@
 pragma solidity 0.8.21;
 
 contract Colors {
-    string[] colors = [
+    string[19] internal colors = [
         "#CEE5D0",
         "#ff8080",
         "#79B4B7",
