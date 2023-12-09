@@ -6,7 +6,6 @@ import { console2 } from "forge-std/console2.sol";
 import { StdCheats } from "forge-std/StdCheats.sol";
 
 import { LucidBlob } from "../src/LucidBlob.sol";
-import { Background } from "../src/layers/Background.sol";
 
 /// @dev If this is your first time with Forge, read this tutorial in the Foundry Book:
 /// https://book.getfoundry.sh/forge/writing-tests

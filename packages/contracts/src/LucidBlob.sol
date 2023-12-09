@@ -38,7 +38,7 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
         string memory body = string(
             abi.encodePacked(
                 '<path stroke="transparent" stroke-width="0" fill = "',
-                colors[normalizeToRange(dna[7], 0, colors.length)],
+                COLORS[normalizeToRange(dna[7], 0, colors.length)],
                 '" d="',
                 blob,
                 'Z" />'

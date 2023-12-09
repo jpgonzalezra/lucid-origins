@@ -7,12 +7,12 @@
     "dev": "turbo run dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "make": "make all",
-    "contract:deploy": "pnpm make && prettier --write \"apps/web/src/config/abis/*.{js,jsx,ts,tsx,json}\"",
+    "contract:deploy": "pnpm make && prettier --write \"packages/app/src/config/abis/*.{js,jsx,ts,tsx,json}\"",
     "lint": "turbo run lint && pnpm lint:format",
     "types:check": "turbo run types:check"
   },
   "keywords": [],
-  "author": "jpgonzalezra",
+  "author": "jpgonzalezra & 0xHermit",
   "license": "MIT",
   "devDependencies": {
     "husky": "^8.0.3",
