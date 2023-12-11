@@ -33,20 +33,43 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
             normalizeToRange(dna[4], 2, 8)
         );
 
-        string memory blob =
-            blob(normalizeToRange(dna[5], 95, 105), normalizeToRange(dna[6], 5, 9), normalizeToRange(dna[7], 6, 9));
+        (string memory blob, string memory blob2) = blob(
+            normalizeToRange(dna[5], 95, 105),
+            normalizeToRange(dna[5], 1, 2),
+            normalizeToRange(dna[6], 5, 9),
+            normalizeToRange(dna[7], 6, 9)
+        );
         string memory body = string(
             abi.encodePacked(
-                '<path stroke="transparent" stroke-width="0" fill = "',
-                colors[normalizeToRange(dna[7], 0, colors.length)],
-                '" d="',
+                '<path d="',
                 blob,
-                'Z" />'
+                'Z" fill="',
+                colors[normalizeToRange(dna[7], 0, colors.length)],
+                '">',
+                '<animate attributeName="d" values="',
+                blob,
+                ";",
+                blob2,
+                ";",
+                blob,
+                '" dur="5s" repeatCount="indefinite"/>',
+                "</path>"
             )
         );
+
         string memory stroke = string(
             abi.encodePacked(
-                '<path transform="translate(-3, -3)" stroke="#000" stroke-width="2" fill = "none" d="', blob, '" />'
+                '<path d="',
+                blob,
+                'Z" stroke="#000" stroke-width="2" fill="none">',
+                '<animate attributeName="d" values="',
+                blob,
+                ";",
+                blob2,
+                ";",
+                blob,
+                '" dur="5s" repeatCount="indefinite"/>',
+                "</path>"
             )
         );
         string memory blush = string(
@@ -55,8 +78,9 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
             )
         );
         string memory footer = "</svg>";
-        string memory svg = string(abi.encodePacked(header, background, body, blush, stroke, eyes, footer));
+        string memory svg = string(abi.encodePacked(header, background, body, stroke, blush, eyes, footer));
 
+        console2.log(svg);
         return metadata(name, description, svg);
     }
 
