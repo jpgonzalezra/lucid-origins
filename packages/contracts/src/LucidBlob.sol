@@ -29,7 +29,7 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
             )
         );
 
-        string memory background = background(normalizeToRange(dna[0], 0, 19));
+        string memory background = background(normalizeToRange(dna[0], 0, 16));
         string memory eyes = eyes(
             normalizeToRange(dna[1], 9, 13),
             normalizeToRange(dna[2], 0, 9),
@@ -47,7 +47,7 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
             abi.encodePacked(
                 '<path d="',
                 blob,
-                'Z" fill="',
+                'Z" transform-origin="center" fill="',
                 colors[normalizeToRange(dna[7], 0, colors.length)],
                 '">',
                 '<animate attributeName="d" values="',
@@ -56,7 +56,11 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
                 blob2,
                 ";",
                 blob,
-                '" dur="5s" repeatCount="indefinite"/>',
+                '" dur="15s" id="body-anim" repeatCount="indefinite"',
+                ' keysplines=".42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;',
+                ' .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
+                '<animateTransform attributeName="transform" type="rotate" ',
+                'from="0" to="360" dur="100" repeatCount="indefinite" />',
                 "</path>"
             )
         );
@@ -65,22 +69,27 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
             abi.encodePacked(
                 '<path d="',
                 blob,
-                'Z" stroke="#000" stroke-width="2" fill="none">',
+                'Z" id="body-stroke" stroke="#000" stroke-width="2" fill="none" transform-origin="center">',
                 '<animate attributeName="d" values="',
                 blob,
                 ";",
                 blob2,
                 ";",
                 blob,
-                '" dur="5s" repeatCount="indefinite"/>',
+                '" dur="16s" id="stroke-anim" repeatCount="indefinite" ',
+                'begin="body-anim.begin + 1s" keysplines=".42 0 1 1; 0 0 .59 1; ',
+                '.42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
+                '<animateTransform attributeName="transform" type="rotate" from="0" ',
+                'to="360" dur="100" repeatCount="indefinite" />',
                 "</path>"
             )
         );
         string memory blush = string(
             abi.encodePacked(
-                "<g>",
-                '<circle  transform = "translate(70, 65)" cx="0" cy="0" r="6" fill="rgba(255,255,255,0.4)" ></circle><circle  transform = "translate(30, 65)" cx="0" cy="0" r="6" fill="rgba(255,255,255,0.4)"></circle>',
-                "</g>"
+                '<circle id="circle-blush" r="6" fill="rgba(255,255,255,0.4)" />',
+                '<animateMotion href="#circle-blush" dur="30s" begin="0s" ',
+                'fill="freeze" repeatCount="indefinite" rotate="auto-reverse" ',
+                '><mpath href="#body-stroke" /></animateMotion>'
             )
         );
         string memory footer = "</svg>";
