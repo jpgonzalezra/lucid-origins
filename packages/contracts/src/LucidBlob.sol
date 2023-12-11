@@ -23,7 +23,8 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
 
         string memory name = string(abi.encodePacked("LucidBlob #", tokenId.uint2str()));
         string memory description = "LucidBlob, fully on-chain NFT";
-        string memory header = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">';
+        string memory header = '<svg viewBox="0 0 100 100"',
+            'xmlns="http://www.w3.org/2000/svg" width="400" height="400">';
 
         string memory background = background(normalizeToRange(dna[0], 0, 19));
         string memory eyes = eyes(
@@ -74,7 +75,9 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
         );
         string memory blush = string(
             abi.encodePacked(
-                '<g><circle  transform = "translate(70, 65)" cx="0" cy="0" r="6" fill="rgba(255,255,255,0.4)" ></circle><circle  transform = "translate(30, 65)" cx="0" cy="0" r="6" fill="rgba(255,255,255,0.4)"></circle></g>'
+                "<g>",
+                '<circle  transform = "translate(70, 65)" cx="0" cy="0" r="6" fill="rgba(255,255,255,0.4)" ></circle><circle  transform = "translate(30, 65)" cx="0" cy="0" r="6" fill="rgba(255,255,255,0.4)"></circle>',
+                "</g>"
             )
         );
         string memory footer = "</svg>";
