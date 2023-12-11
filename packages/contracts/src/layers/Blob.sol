@@ -15,9 +15,18 @@ contract Blob {
     using String for uint256;
     using Trigonometry for uint256;
 
-    function blob(uint256 size, uint256 minGrowth, uint256 edgesNum) internal view returns (string memory) {
+    function blob(
+        uint256 size,
+        uint256 animation,
+        uint256 minGrowth,
+        uint256 edgesNum
+    )
+        internal
+        view
+        returns (string memory, string memory)
+    {
         Point[] memory points = createPoints(size, minGrowth, edgesNum);
-        return createSvgPath(points);
+        return (createSvgPath(points), createSvgPath(createPoints(size + animation, minGrowth, edgesNum)));
     }
 
     function createPoints(uint256 size, uint256 minGrowth, uint256 edgesNum) internal view returns (Point[] memory) {
