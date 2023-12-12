@@ -4,6 +4,7 @@ pragma solidity 0.8.21;
 // import { console2 } from "forge-std/console2.sol";
 import { String } from "../utils/String.sol";
 import { Trigonometry } from "solidity-trigonometry/Trigonometry.sol";
+import { DNA } from "../utils/constants.sol";
 
 contract Blob {
     struct Point {
@@ -15,16 +16,11 @@ contract Blob {
     using String for uint256;
     using Trigonometry for uint256;
 
-    function blob(
-        uint256 size,
-        uint256 animation,
-        uint256 minGrowth,
-        uint256 edgesNum
-    )
-        internal
-        view
-        returns (string memory, string memory)
-    {
+    function blob(DNA.Data memory dna) internal view returns (string memory, string memory) {
+        uint256 size = normalizeToRange(dna.blobSize, 95, 105);
+        uint256 animation = normalizeToRange(dna.blobSize, 1, 2);
+        uint256 minGrowth = normalizeToRange(dna.blobMinGrowth, 5, 9);
+        uint256 edgesNum = normalizeToRange(dna.blobEdgesNum, 6, 9);
         Point[] memory points = createPoints(size, minGrowth, edgesNum);
         return (createSvgPath(points), createSvgPath(createPoints(size + animation, minGrowth, edgesNum)));
     }
@@ -92,5 +88,11 @@ contract Blob {
         }
 
         return string(abi.encodePacked(svgPath, "Z"));
+    }
+
+    function normalizeToRange(uint256 value, uint256 minRange, uint256 maxRange) internal pure returns (uint8) {
+        require(minRange <= maxRange, "invalid Min/Max range");
+        uint256 adjustedRange = maxRange - minRange + 1;
+        return uint8(minRange + (value % adjustedRange));
     }
 }

@@ -12,4 +12,20 @@ library Constants {
     uint256 public constant BLOB_SIZE_INDEX = 5;
     uint256 public constant BLOB_MIN_GROWTH_INDEX = 6;
     uint256 public constant BLOB_EDGES_NUM_INDEX = 7;
+
+    uint256 public constant BODY_RGB_INDEX = 8;
+}
+
+library DNA {
+    struct Data {
+        uint16 backgroundIndex;
+        uint16 eyeSize;
+        uint16 eyeDnaLayer;
+        uint16 eyePositionX;
+        uint16 eyePositionY;
+        uint16 blobSize;
+        uint16 blobMinGrowth;
+        uint16 blobEdgesNum;
+        uint16 bodyRgb;
+    }
 }
