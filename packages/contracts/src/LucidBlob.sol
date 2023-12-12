@@ -6,13 +6,12 @@ import { Encoder } from "./Encoder.sol";
 import { Owned } from "solmate/auth/Owned.sol";
 import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
-import { Colors } from "./utils/Colors.sol";
 import { Eyes } from "./layers/Eyes.sol";
 import { Blob } from "./layers/Blob.sol";
 import { String } from "./utils/String.sol";
 import { Constants } from "./utils/constants.sol";
 
-contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
+contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob {
     using Encoder for string;
     using String for string;
     using String for uint256;
