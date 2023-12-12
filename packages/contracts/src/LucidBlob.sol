@@ -47,8 +47,13 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
                 '<path d="',
                 blob,
                 'Z" transform-origin="center" fill="',
-                colors[normalizeToRange(dna[7], 0, colors.length)],
-                '">',
+                "rgb(",
+                normalizeToRange(dna[Constants.BODY_R_INDEX], 1, 255).uint2str(),
+                ",",
+                normalizeToRange(dna[Constants.BODY_G_INDEX], 1, 255).uint2str(),
+                ",",
+                normalizeToRange(dna[Constants.BODY_B_INDEX], 1, 255).uint2str(),
+                ')">',
                 '<animate attributeName="d" values="',
                 blob,
                 ";",
@@ -149,9 +154,9 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
         return digits;
     }
 
-    function normalizeToRange(uint256 value, uint256 minRange, uint256 maxRange) internal pure returns (uint8) {
+    function normalizeToRange(uint256 value, uint256 minRange, uint256 maxRange) internal pure returns (uint256) {
         require(minRange <= maxRange, "invalid Min/Max range");
         uint256 adjustedRange = maxRange - minRange + 1;
-        return uint8(minRange + (value % adjustedRange));
+        return minRange + (value % adjustedRange);
     }
 }

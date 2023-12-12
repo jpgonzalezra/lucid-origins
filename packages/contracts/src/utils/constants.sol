@@ -12,4 +12,8 @@ library Constants {
     uint256 public constant BLOB_SIZE_INDEX = 5;
     uint256 public constant BLOB_MIN_GROWTH_INDEX = 6;
     uint256 public constant BLOB_EDGES_NUM_INDEX = 7;
+
+    uint256 public constant BODY_R_INDEX = 8;
+    uint256 public constant BODY_G_INDEX = 9;
+    uint256 public constant BODY_B_INDEX = 10;
 }
