@@ -10,6 +10,7 @@ import { Colors } from "./utils/Colors.sol";
 import { Eyes } from "./layers/Eyes.sol";
 import { Blob } from "./layers/Blob.sol";
 import { String } from "./utils/String.sol";
+import { Constants } from "./utils/constants.sol";
 
 contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
     using Encoder for string;
@@ -24,24 +25,22 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Colors {
         string memory name = string(abi.encodePacked("LucidBlob #", tokenId.uint2str()));
         string memory description = "LucidBlob, fully on-chain NFT";
         string memory header = string(
-            abi.encodePacked(
-                '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">'
-            )
+            abi.encodePacked('<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">')
         );
 
-        string memory background = background(normalizeToRange(dna[0], 0, 16));
+        string memory background = background(normalizeToRange(dna[Constants.BACKGROUND_INDEX], 0, 16));
         string memory eyes = eyes(
-            normalizeToRange(dna[1], 9, 13),
-            normalizeToRange(dna[2], 0, 9),
-            normalizeToRange(dna[3], 2, 8),
-            normalizeToRange(dna[4], 2, 8)
+            normalizeToRange(dna[Constants.EYE_SIZE_INDEX], 9, 13),
+            normalizeToRange(dna[Constants.EYE_DNA_LAYER_INDEX], 0, 9),
+            normalizeToRange(dna[Constants.EYE_POSITION_X_INDEX], 2, 8),
+            normalizeToRange(dna[Constants.EYE_POSITION_Y_INDEX], 2, 8)
         );
 
         (string memory blob, string memory blob2) = blob(
-            normalizeToRange(dna[5], 95, 105),
-            normalizeToRange(dna[5], 1, 2),
-            normalizeToRange(dna[6], 5, 9),
-            normalizeToRange(dna[7], 6, 9)
+            normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 95, 105),
+            normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 1, 2),
+            normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 5, 9),
+            normalizeToRange(dna[Constants.BLOB_EDGES_NUM_INDEX], 6, 9)
         );
         string memory body = string(
             abi.encodePacked(
