@@ -98,6 +98,17 @@ export default [
     type: 'function',
   },
   {
+    inputs: [
+      { internalType: 'uint256', name: 'r', type: 'uint256' },
+      { internalType: 'uint256', name: 'g', type: 'uint256' },
+      { internalType: 'uint256', name: 'b', type: 'uint256' },
+    ],
+    name: 'isColorDark',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'pure',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'name',
     outputs: [{ internalType: 'string', name: '', type: 'string' }],

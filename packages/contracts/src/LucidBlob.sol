@@ -27,12 +27,18 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob {
             abi.encodePacked('<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">')
         );
 
+        uint256 r = normalizeToRange(dna[Constants.BODY_R_INDEX], 1, 255);
+        uint256 g = normalizeToRange(dna[Constants.BODY_G_INDEX], 1, 255);
+        uint256 b = normalizeToRange(dna[Constants.BODY_B_INDEX], 1, 255);
+        string memory linesColor = isColorDark(r, g, b) ? "#FFF" : "#000";
+
         string memory background = background(normalizeToRange(dna[Constants.BACKGROUND_INDEX], 0, 16));
         string memory eyes = eyes(
             normalizeToRange(dna[Constants.EYE_SIZE_INDEX], 9, 13),
             normalizeToRange(dna[Constants.EYE_DNA_LAYER_INDEX], 0, 9),
             normalizeToRange(dna[Constants.EYE_POSITION_X_INDEX], 2, 8),
-            normalizeToRange(dna[Constants.EYE_POSITION_Y_INDEX], 2, 8)
+            normalizeToRange(dna[Constants.EYE_POSITION_Y_INDEX], 2, 8),
+            linesColor
         );
 
         (string memory blob, string memory blob2) = blob(
@@ -41,17 +47,18 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob {
             normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 5, 9),
             normalizeToRange(dna[Constants.BLOB_EDGES_NUM_INDEX], 6, 9)
         );
+
         string memory body = string(
             abi.encodePacked(
                 '<path d="',
                 blob,
                 'Z" transform-origin="center" fill="',
                 "rgb(",
-                normalizeToRange(dna[Constants.BODY_R_INDEX], 1, 255).uint2str(),
+                r.uint2str(),
                 ",",
-                normalizeToRange(dna[Constants.BODY_G_INDEX], 1, 255).uint2str(),
+                g.uint2str(),
                 ",",
-                normalizeToRange(dna[Constants.BODY_B_INDEX], 1, 255).uint2str(),
+                b.uint2str(),
                 ')">',
                 '<animate attributeName="d" values="',
                 blob,
@@ -72,7 +79,9 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob {
             abi.encodePacked(
                 '<path d="',
                 blob,
-                'Z" id="body-stroke" stroke="#000" stroke-width="2" fill="none" transform-origin="center">',
+                'Z" id="body-stroke" stroke="',
+                linesColor,
+                '" stroke-width="2" fill="none" transform-origin="center">',
                 '<animate attributeName="d" values="',
                 blob,
                 ";",
@@ -157,5 +166,9 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob {
         require(minRange <= maxRange, "invalid Min/Max range");
         uint256 adjustedRange = maxRange - minRange + 1;
         return minRange + (value % adjustedRange);
+    }
+
+    function isColorDark(uint256 r, uint256 g, uint256 b) public pure returns (bool) {
+        return (2126 * r + 7152 * g + 722 * b) / 10_000 < 128;
     }
 }

@@ -12,7 +12,8 @@ contract Eyes {
         uint256 size,
         uint256 dnaEyesLayer,
         uint256 randPositionX,
-        uint256 randPositionY
+        uint256 randPositionY,
+        string memory linesColor
     )
         internal
         pure
@@ -24,7 +25,9 @@ contract Eyes {
                 abi.encodePacked(
                     '<g id="eye" transform = "translate(50, 50)"><circle id="iris" cx="0" cy="0" r="',
                     size.uint2str(),
-                    '" stroke="#000" stroke-width="2" fill="#fff"></circle><circle id="pupil" cx="',
+                    '" stroke="',
+                    linesColor,
+                    '" stroke-width="2" fill="#fff"></circle><circle id="pupil" cx="',
                     positionX.int2str(),
                     '" cy="',
                     positionY.int2str(),
@@ -40,7 +43,9 @@ contract Eyes {
                 abi.encodePacked(
                     '<g><g transform = "translate(38, 50)"><circle cx="0" cy="0" r="',
                     size.uint2str(),
-                    '" stroke="#000" stroke-width="2" fill="#fff"></circle><circle cx="',
+                    '" stroke="',
+                    linesColor,
+                    '" stroke-width="2" fill="#fff"></circle><circle cx="',
                     positionX.int2str(),
                     '" cy="',
                     positionY.int2str(),
@@ -48,7 +53,9 @@ contract Eyes {
                     pupilSize.uint2str(),
                     '" fill="#000"></circle></g><g transform = "translate(58, 50)"><circle cx="0" cy="0" r="',
                     size.uint2str(),
-                    '" stroke="#000" stroke-width="2" fill="#fff"></circle><circle cx="',
+                    '" stroke="',
+                    linesColor,
+                    '" stroke-width="2" fill="#fff"></circle><circle cx="',
                     positionX.int2str(),
                     '" cy="',
                     positionY.int2str(),
