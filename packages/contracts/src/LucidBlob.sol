@@ -8,10 +8,11 @@ import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
 import { Eyes } from "./layers/Eyes.sol";
 import { Blob } from "./layers/Blob.sol";
+import { Blush } from "./layers/Blush.sol";
 import { String } from "./utils/String.sol";
 import { Constants } from "./utils/constants.sol";
 
-contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob {
+contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Blush {
     using Encoder for string;
     using String for string;
     using String for uint256;
@@ -22,10 +23,7 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob {
         uint16[] memory dna = getDna(uint256(keccak256(abi.encodePacked(tokenId))));
 
         string memory name = string(abi.encodePacked("LucidBlob #", tokenId.uint2str()));
-        string memory description = "LucidBlob, fully on-chain NFT";
-        string memory header = string(
-            abi.encodePacked('<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">')
-        );
+        string memory header = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">';
 
         uint256 r = normalizeToRange(dna[Constants.BODY_R_INDEX], 1, 255);
         uint256 g = normalizeToRange(dna[Constants.BODY_G_INDEX], 1, 255);
@@ -96,36 +94,22 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob {
                 "</path>"
             )
         );
-        string memory blush = string(
-            abi.encodePacked(
-                '<circle id="circle-blush" r="6" fill="rgba(255,255,255,0.4)" />',
-                '<animateMotion href="#circle-blush" dur="30s" begin="0s" ',
-                'fill="freeze" repeatCount="indefinite" rotate="auto-reverse" ',
-                '><mpath href="#body-stroke" /></animateMotion>'
-            )
-        );
+
         string memory footer = "</svg>";
-        string memory svg = string(abi.encodePacked(header, background, body, stroke, blush, eyes, footer));
+        string memory svg = string(abi.encodePacked(header, background, body, stroke, blush(), eyes, footer));
 
         console2.log(svg);
-        return metadata(name, description, svg);
+        return metadata(name, svg);
     }
 
-    function metadata(
-        string memory name,
-        string memory desciption,
-        string memory svg
-    )
-        internal
-        pure
-        returns (string memory)
-    {
+    function metadata(string memory name, string memory svg) internal pure returns (string memory) {
+        string memory description = "LucidBlob, fully on-chain NFT";
         string memory json = string(
             abi.encodePacked(
                 '{"name":"',
                 name,
                 '","description":"',
-                desciption,
+                description,
                 '","image": "data:image/svg+xml;base64,',
                 Encoder.base64(bytes(svg)),
                 '"}'
