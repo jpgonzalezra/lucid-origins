@@ -16,22 +16,69 @@ contract Body {
         uint256 g2,
         uint256 b2,
         string memory blob,
-        string memory blob2
+        string memory blob2,
+        uint256 base
     )
         internal
         pure
         returns (string memory, string memory)
     {
-        return (getBody(r, g, b, r2, g2, b2, blob, blob2), getStroke(blob, blob2));
+        (string memory colorDefs, string memory fillColor) = getColor(r, g, b, r2, g2, b2, base);
+
+        return (getBody(colorDefs, fillColor, blob, blob2), getStroke(blob, blob2));
     }
 
-    function getBody(
+    function getColor(
         uint256 r,
         uint256 g,
         uint256 b,
         uint256 r2,
         uint256 g2,
         uint256 b2,
+        uint256 base
+    )
+        internal
+        pure
+        returns (string memory, string memory)
+    {
+        bool isPlain = base < 20;
+        string memory colorDefs = isPlain
+            ? ""
+            : string(
+                abi.encodePacked(
+                    "<defs>",
+                    '<linearGradient id="linear-grad">',
+                    '<stop offset="0" stop-color="',
+                    "rgb(",
+                    r.uint2str(),
+                    ",",
+                    g.uint2str(),
+                    ",",
+                    b.uint2str(),
+                    ')"/>',
+                    '<stop offset="1" stop-color="',
+                    "rgb(",
+                    r2.uint2str(),
+                    ",",
+                    g2.uint2str(),
+                    ",",
+                    b2.uint2str(),
+                    ')"/>',
+                    "</linearGradient>",
+                    "</defs>"
+                )
+            );
+
+        string memory fillColor = isPlain
+            ? string(abi.encodePacked("rgb(", r.uint2str(), ",", g.uint2str(), ",", b.uint2str(), ")"))
+            : "url(#linear-grad)";
+
+        return (colorDefs, fillColor);
+    }
+
+    function getBody(
+        string memory colorDefs,
+        string memory fillColor,
         string memory blob,
         string memory blob2
     )
@@ -41,36 +88,12 @@ contract Body {
     {
         return string(
             abi.encodePacked(
-                "<defs>",
-                '<linearGradient id="linear-grad">',
-                '<stop offset="0" stop-color="',
-                "rgb(",
-                r.uint2str(),
-                ",",
-                g.uint2str(),
-                ",",
-                b.uint2str(),
-                ')"/>',
-                '<stop offset="1" stop-color="',
-                "rgb(",
-                r2.uint2str(),
-                ",",
-                g2.uint2str(),
-                ",",
-                b2.uint2str(),
-                ')"/>',
-                "</linearGradient>",
-                "</defs>",
+                colorDefs,
                 '<path d="',
                 blob,
-                'Z" transform-origin="center" fill="url(#linear-grad)">',
-                // "rgb(",
-                // r.uint2str(),
-                // ",",
-                // g.uint2str(),
-                // ",",
-                // b.uint2str(),
-                // ')">',
+                'Z" transform-origin="center" fill="',
+                fillColor,
+                '">',
                 '<animate attributeName="d" values="',
                 blob,
                 ";",
