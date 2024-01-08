@@ -55,11 +55,11 @@ contract LucidBlob is Owned, ERC721A, Background, Face, Body, Blob, Blush {
             normalizeToRange(dna[Constants.BLOB_EDGES_NUM_INDEX], 4, 12)
         );
 
-        (string memory body, string memory stroke) =
+        (string memory body, string memory stroke, string memory baseBody) =
             body(r, g, b, r2, g2, b2, blob, blob2, normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 0, 50));
 
         string memory footer = "</svg>";
-        string memory svg = string(abi.encodePacked(header, background, body, stroke, blush(), face, footer));
+        string memory svg = string(abi.encodePacked(header, background, baseBody, body, stroke, blush(), face, footer));
 
         return metadata(name, svg);
     }
