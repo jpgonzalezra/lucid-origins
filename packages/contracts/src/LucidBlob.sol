@@ -6,13 +6,14 @@ import { Encoder } from "./Encoder.sol";
 import { Owned } from "solmate/auth/Owned.sol";
 import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
-import { Eyes } from "./layers/Eyes.sol";
+import { Face } from "./layers/Face.sol";
+import { Body } from "./layers/Body.sol";
 import { Blob } from "./layers/Blob.sol";
 import { Blush } from "./layers/Blush.sol";
 import { String } from "./utils/String.sol";
 import { Constants } from "./utils/constants.sol";
 
-contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Blush {
+contract LucidBlob is Owned, ERC721A, Background, Face, Body, Blob, Blush {
     using Encoder for string;
     using String for string;
     using String for uint256;
@@ -28,77 +29,37 @@ contract LucidBlob is Owned, ERC721A, Background, Eyes, Blob, Blush {
         uint256 r = normalizeToRange(dna[Constants.BODY_R_INDEX], 1, 255);
         uint256 g = normalizeToRange(dna[Constants.BODY_G_INDEX], 1, 255);
         uint256 b = normalizeToRange(dna[Constants.BODY_B_INDEX], 1, 255);
+
+        uint256 r2 = normalizeToRange(dna[Constants.EYE_SIZE_INDEX], 1, 255);
+        uint256 g2 = normalizeToRange(dna[Constants.EYE_POSITION_X_INDEX], 1, 255);
+        uint256 b2 = normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 1, 255);
         string memory linesColor = isColorDark(r, g, b) ? "#FFF" : "#000";
 
         string memory background = background(normalizeToRange(dna[Constants.BACKGROUND_INDEX], 0, 16));
-        string memory eyes = eyes(
-            normalizeToRange(dna[Constants.EYE_SIZE_INDEX], 9, 13),
-            normalizeToRange(dna[Constants.EYE_DNA_LAYER_INDEX], 0, 9),
-            normalizeToRange(dna[Constants.EYE_POSITION_X_INDEX], 2, 8),
-            normalizeToRange(dna[Constants.EYE_POSITION_Y_INDEX], 2, 8),
+
+        string memory face = face(
+            normalizeToRange(dna[Constants.EYE_SIZE_INDEX], 4, 7),
+            normalizeToRange(dna[Constants.EYE_DNA_LAYER_INDEX], 1, 4),
+            normalizeToRange(dna[Constants.EYE_POSITION_X_INDEX], 20, 30),
+            normalizeToRange(dna[Constants.EYE_POSITION_Y_INDEX], 0, 20),
+            normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 0, 6),
+            normalizeToRange(dna[Constants.BLOB_EDGES_NUM_INDEX], 1, 5),
             linesColor
         );
 
         (string memory blob, string memory blob2) = blob(
-            normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 95, 105),
+            normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 85, 90),
             normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 1, 2),
-            normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 5, 9),
-            normalizeToRange(dna[Constants.BLOB_EDGES_NUM_INDEX], 6, 9)
+            normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 6, 8),
+            normalizeToRange(dna[Constants.BLOB_EDGES_NUM_INDEX], 4, 12)
         );
 
-        string memory body = string(
-            abi.encodePacked(
-                '<path d="',
-                blob,
-                'Z" transform-origin="center" fill="',
-                "rgb(",
-                r.uint2str(),
-                ",",
-                g.uint2str(),
-                ",",
-                b.uint2str(),
-                ')">',
-                '<animate attributeName="d" values="',
-                blob,
-                ";",
-                blob2,
-                ";",
-                blob,
-                '" dur="15s" id="body-anim" repeatCount="indefinite"',
-                ' keysplines=".42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;',
-                ' .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
-                '<animateTransform attributeName="transform" type="rotate" ',
-                'from="0" to="360" dur="100" repeatCount="indefinite" />',
-                "</path>"
-            )
-        );
-
-        string memory stroke = string(
-            abi.encodePacked(
-                '<path d="',
-                blob,
-                'Z" id="body-stroke" stroke="',
-                linesColor,
-                '" stroke-width="2" fill="none" transform-origin="center">',
-                '<animate attributeName="d" values="',
-                blob,
-                ";",
-                blob2,
-                ";",
-                blob,
-                '" dur="16s" id="stroke-anim" repeatCount="indefinite" ',
-                'begin="body-anim.begin + 1s" keysplines=".42 0 1 1; 0 0 .59 1; ',
-                '.42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
-                '<animateTransform attributeName="transform" type="rotate" from="0" ',
-                'to="360" dur="100" repeatCount="indefinite" />',
-                "</path>"
-            )
-        );
+        (string memory body, string memory stroke, string memory baseBody) =
+            body(r, g, b, r2, g2, b2, blob, blob2, normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 0, 50));
 
         string memory footer = "</svg>";
-        string memory svg = string(abi.encodePacked(header, background, body, stroke, blush(), eyes, footer));
+        string memory svg = string(abi.encodePacked(header, background, baseBody, body, stroke, blush(), face, footer));
 
-        console2.log(svg);
         return metadata(name, svg);
     }
 

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Improved SVG Face Generator</title>
+  </head>
+  <body>
+    <!-- Display generated SVG faces here -->
+    <div id="faceContainer" style="display: flex; flex-wrap: wrap"></div>
+
+    <script>
+      function generateRandomValue(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function getRandomBoolean() {
+        return Math.random() < 0.5;
+      }
+
+      function generateRandomFace() {
+        // Random values for face parts
+        const eyeRadius = generateRandomValue(4, 7);
+        const eyebrowLength = generateRandomValue(1, 4);
+        const eyeSeparation = generateRandomValue(20, 30);
+        const eyebrowRotation = generateRandomValue(0, 20);
+        const mouthRotation = generateRandomValue(0, 6);
+        const eyebrowSize = generateRandomValue(1, 5);
+
+        // SVG code array for the generated face
+        const svgCode = ["<g>"];
+
+        // Left eye with variations
+        svgCode.push(
+          '<circle cx="',
+          50 - eyeSeparation / 2,
+          '" cy="40" r="',
+          eyeRadius,
+          '" fill="black" transform="rotate(',
+          eyebrowRotation,
+          " ",
+          50 - eyeSeparation / 2,
+          ' 40)"/>'
+        );
+
+        // Right eye with variations
+        svgCode.push(
+          '<circle cx="',
+          50 + eyeSeparation / 2,
+          '" cy="40" r="',
+          eyeRadius,
+          '" fill="black" transform="rotate(',
+          eyebrowRotation,
+          " ",
+          50 + eyeSeparation / 2,
+          ' 40)"/>'
+        );
+
+        // Visible eyebrow with hand-drawn style (Left)
+        svgCode.push(
+          '<line x1="',
+          35 - eyebrowSize,
+          '" y1="',
+          30 - eyebrowLength,
+          '" x2="',
+          45 + eyebrowSize,
+          '" y2="',
+          30 - eyebrowLength,
+          '" stroke="black" stroke-width="4" stroke-linecap="round" transform="rotate(',
+          eyebrowRotation,
+          " 35 ",
+          30 - eyebrowLength,
+          ") scale(",
+          eyebrowRotation > 10 ? 0 : 1,
+          ')"/>'
+        );
+
+        // Visible eyebrow with hand-drawn style (Right)
+        svgCode.push(
+          '<line x1="',
+          60 - eyebrowSize,
+          '" y1="',
+          30 - eyebrowLength,
+          '" x2="',
+          65 + eyebrowSize,
+          '" y2="',
+          30 - eyebrowLength,
+          '" stroke="black" stroke-width="4" stroke-linecap="round" transform="rotate(',
+          eyebrowRotation,
+          " 65 ",
+          30 - eyebrowLength,
+          ") scale(",
+          mouthRotation > 3 ? 0 : 1,
+          ')"/>'
+        );
+
+        // Mouth with variations
+        const controlY = 5 + mouthRotation;
+        const size = eyeSeparation - eyebrowRotation;
+
+        // Using existing random values for the path
+        const x1 = 40 - mouthRotation;
+        const x3 = 60 + eyebrowSize;
+        const x2 = (x1 + x3) / 2;
+        const y1 = 50 + controlY;
+        const y2 = eyeSeparation > 25 ? 50 + size : 50 - size;
+        const y3 = 50 + controlY;
+
+        svgCode.push(
+          '<path d="M',
+          x1,
+          " ",
+          y1,
+          " Q",
+          x2,
+          " ",
+          y2,
+          " ",
+          x3,
+          " ",
+          y3,
+          '" stroke="black" stroke-width="4" fill="transparent" stroke-linecap="round" transform="rotate(',
+          mouthRotation,
+          " 50 ",
+          50 + controlY,
+          ')"/>'
+        );
+
+        // Close the 'g' group
+        svgCode.push("</g>");
+
+        return svgCode.join("");
+      }
+
+      // Generate and display 3 random faces for demonstration
+      const faceContainer = document.getElementById("faceContainer");
+      for (let i = 0; i < 300; i++) {
+        const svgFace = generateRandomFace();
+        faceContainer.innerHTML += `
+        <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100">
+            ${svgFace}
+        </svg>
+        `;
+      }
+    </script>
+  </body>
+</html>
