@@ -6,7 +6,6 @@ import { Encoder } from "./Encoder.sol";
 import { Owned } from "solmate/auth/Owned.sol";
 import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
-import { Eyes } from "./layers/Eyes.sol";
 import { Face } from "./layers/Face.sol";
 import { Body } from "./layers/Body.sol";
 import { Blob } from "./layers/Blob.sol";
