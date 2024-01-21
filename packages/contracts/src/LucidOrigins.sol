@@ -46,18 +46,20 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
             linesColor
         );
 
-        (string memory head, string memory head2) = head(
+        (string memory colorDefs, string memory fillColor) = getColor(r, g, b, r2, g2, b2, dna[Constants.BASE_INDEX]);
+        (string memory head, string memory stroke) = head(
             normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 85, 88),
             normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 0, 2),
             normalizeToRange(dna[Constants.HEAD_MIN_GROWTH_INDEX], 6, 9),
-            normalizeToRange(dna[Constants.HEAD_EDGES_NUM_INDEX], 7, 9)
+            normalizeToRange(dna[Constants.HEAD_EDGES_NUM_INDEX], 7, 20),
+            colorDefs,
+            fillColor
         );
 
-        (string memory body, string memory stroke, string memory baseBody) =
-            body(r, g, b, r2, g2, b2, head, head2, normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 0, 50));
-
         string memory footer = "</svg>";
-        string memory svg = string(abi.encodePacked(header, background, baseBody, body, stroke, blush(), face, footer));
+        string memory svg = string(
+            abi.encodePacked(header, background, body(colorDefs, fillColor), head, stroke, blush(), face, footer)
+        );
 
         return metadata(name, svg);
     }
@@ -114,5 +116,53 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
 
     function isColorDark(uint256 r, uint256 g, uint256 b) public pure returns (bool) {
         return (2126 * r + 7152 * g + 722 * b) / 10_000 < 128;
+    }
+
+    function getColor(
+        uint256 r,
+        uint256 g,
+        uint256 b,
+        uint256 r2,
+        uint256 g2,
+        uint256 b2,
+        uint256 base
+    )
+        internal
+        pure
+        returns (string memory, string memory)
+    {
+        bool isPlain = base < 20;
+        string memory colorDefs = isPlain
+            ? ""
+            : string(
+                abi.encodePacked(
+                    "<defs>",
+                    '<linearGradient id="linear-grad">',
+                    '<stop offset="0" stop-color="',
+                    "rgb(",
+                    r.toString(),
+                    ",",
+                    g.toString(),
+                    ",",
+                    b.toString(),
+                    ')"/>',
+                    '<stop offset="1" stop-color="',
+                    "rgb(",
+                    r2.toString(),
+                    ",",
+                    g2.toString(),
+                    ",",
+                    b2.toString(),
+                    ')"/>',
+                    "</linearGradient>",
+                    "</defs>"
+                )
+            );
+
+        string memory fillColor = isPlain
+            ? string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",", b.toString(), ")"))
+            : "url(#linear-grad)";
+
+        return (colorDefs, fillColor);
     }
 }

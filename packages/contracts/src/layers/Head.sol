@@ -18,14 +18,18 @@ contract Head {
         uint256 size,
         uint256 animation,
         uint256 minGrowth,
-        uint256 edgesNum
+        uint256 edgesNum,
+        string memory colorDefs,
+        string memory fillColor
     )
         internal
         view
         returns (string memory, string memory)
     {
         Point[] memory points = createPoints(size, minGrowth, edgesNum);
-        return (createSvgPath(points), createSvgPath(createPoints(size + animation, minGrowth, edgesNum)));
+        string memory h1 = createSvgPath(points);
+        string memory h2 = createSvgPath(createPoints(size + animation, minGrowth, edgesNum));
+        return (buildHead(colorDefs, fillColor, h1, h2), buildStroke(h1, h2));
     }
 
     function createPoints(uint256 size, uint256 minGrowth, uint256 edgesNum) internal view returns (Point[] memory) {
@@ -91,5 +95,63 @@ contract Head {
         }
 
         return string(abi.encodePacked(svgPath, "Z"));
+    }
+
+    function buildHead(
+        string memory colorDefs,
+        string memory fillColor,
+        string memory h1,
+        string memory h2
+    )
+        private
+        pure
+        returns (string memory)
+    {
+        return string(
+            abi.encodePacked(
+                colorDefs,
+                '<path id="head" d="',
+                h1,
+                'Z" transform-origin="center" fill="',
+                fillColor,
+                '">',
+                '<animate attributeName="d" values="',
+                h1,
+                ";",
+                h2,
+                ";",
+                h1,
+                '" dur="15s" id="body-anim" repeatCount="indefinite"',
+                ' keysplines=".42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;',
+                ' .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
+                '<animateTransform attributeName="transform" type="rotate" ',
+                'from="0" to="10" dur="1000" repeatCount="indefinite" />',
+                "</path>"
+            )
+        );
+    }
+
+    function buildStroke(string memory h, string memory h2) private pure returns (string memory) {
+        return string(
+            abi.encodePacked(
+                '<path d="',
+                h,
+                'Z" id="body-stroke" stroke="',
+                "black",
+                '" stroke-width="2" fill="none" transform-origin="center">',
+                '<animate attributeName="d" values="',
+                h,
+                ";",
+                h2,
+                ";",
+                h,
+                '" dur="16s" id="stroke-anim" repeatCount="indefinite" ',
+                'begin="body-anim.begin + 2s" keysplines=".42 0 1 1; 0 0 .59 1; ',
+                '.42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
+                '<animateTransform attributeName="transform" type="rotate" from="0" ',
+                'to="30" dur="1000" repeatCount="indefinite" />',
+                "</path>"
+            )
+        );
     }
 }
