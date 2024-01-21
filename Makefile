@@ -1,8 +1,8 @@
 CONTRACTS_DIR := packages/contracts
 APP_DIR := apps/web
 ABI_DIR := $(APP_DIR)/src/config/abis
-CONTRACT_NAME := LucidBlob
-DEPLOY_SCRIPT_DIR := packages/contracts/broadcast/LucidBlobDeploy.s.sol
+CONTRACT_NAME := LucidOrigins
+DEPLOY_SCRIPT_DIR := packages/contracts/broadcast/LucidOriginsDeploy.s.sol
 JSON_FILE := $(CONTRACTS_DIR)/out/$(CONTRACT_NAME).sol/$(CONTRACT_NAME).json
 ANVIL := 31337
 
@@ -21,11 +21,11 @@ move_abi:
 
 deploy_contract_anvil:
 	@echo "Deploying..."
-	cd $(CONTRACTS_DIR) && forge script script/LucidBlobDeploy.s.sol --broadcast --fork-url http://localhost:8545
+	cd $(CONTRACTS_DIR) && forge script script/LucidOriginsDeploy.s.sol --broadcast --fork-url http://localhost:8545
 
 update_env:
 	@echo "Updation .env file with deployment info"
-	$(eval CONTRACT_ADDRESS=$(shell grep -A 3 "lucidBlob" $(DEPLOY_SCRIPT_DIR)/$(ANVIL)/run-latest.json | sed -n 's/.*"value": "\([^"]*\)".*/\1/p'))
+	$(eval CONTRACT_ADDRESS=$(shell grep -A 3 "lucidOrigins" $(DEPLOY_SCRIPT_DIR)/$(ANVIL)/run-latest.json | sed -n 's/.*"value": "\([^"]*\)".*/\1/p'))
 	@echo $(CONTRACT_ADDRESS)
 	if [ ! -f $(APP_DIR)/.env ]; then \
 		touch $(APP_DIR)/.env; \

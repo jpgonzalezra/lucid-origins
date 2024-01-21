@@ -118,10 +118,10 @@ $ forge coverage
 
 ### Deploy
 
-Deploy LucidBlob to Anvil:
+Deploy LucidOrigin to Anvil:
 
 ```sh
-$ forge script script/LucidBlobDeploy.s.sol --broadcast --fork-url http://localhost:8545
+$ forge script script/LucidOriginDeploy.s.sol --broadcast --fork-url http://localhost:8545
 ```
 
 For this script to work, you need to have a `MNEMONIC` environment variable set to a valid

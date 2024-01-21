@@ -15,8 +15,8 @@ contract Body {
         uint256 r2,
         uint256 g2,
         uint256 b2,
-        string memory blob,
-        string memory blob2,
+        string memory head,
+        string memory head2,
         uint256 base
     )
         internal
@@ -24,9 +24,9 @@ contract Body {
         returns (string memory, string memory, string memory)
     {
         (string memory colorDefs, string memory fillColor) = getColor(r, g, b, r2, g2, b2, base);
-        // string memory baseBody = getBaseBody(colorDefs, fillColor, blob, blob2);
+        // string memory baseBody = getBaseBody(colorDefs, fillColor, head, head2);
 
-        return (getBody(colorDefs, fillColor, blob, blob2), getStroke(blob, blob2), getBaseBody(colorDefs, fillColor));
+        return (getBody(colorDefs, fillColor, head, head2), getStroke(head, head2), getBaseBody(colorDefs, fillColor));
     }
 
     function getColor(
@@ -80,8 +80,8 @@ contract Body {
     function getBody(
         string memory colorDefs,
         string memory fillColor,
-        string memory blob,
-        string memory blob2
+        string memory head,
+        string memory head2
     )
         internal
         pure
@@ -91,16 +91,16 @@ contract Body {
             abi.encodePacked(
                 colorDefs,
                 '<path id="head" d="',
-                blob,
+                head,
                 'Z" transform-origin="center" fill="',
                 fillColor,
                 '">',
                 '<animate attributeName="d" values="',
-                blob,
+                head,
                 ";",
-                blob2,
+                head2,
                 ";",
-                blob,
+                head,
                 '" dur="15s" id="body-anim" repeatCount="indefinite"',
                 ' keysplines=".42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;',
                 ' .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
@@ -111,20 +111,20 @@ contract Body {
         );
     }
 
-    function getStroke(string memory blob, string memory blob2) internal pure returns (string memory) {
+    function getStroke(string memory head, string memory head2) internal pure returns (string memory) {
         return string(
             abi.encodePacked(
                 '<path d="',
-                blob,
+                head,
                 'Z" id="body-stroke" stroke="',
                 "black",
                 '" stroke-width="2" fill="none" transform-origin="center">',
                 '<animate attributeName="d" values="',
-                blob,
+                head,
                 ";",
-                blob2,
+                head2,
                 ";",
-                blob,
+                head,
                 '" dur="16s" id="stroke-anim" repeatCount="indefinite" ',
                 'begin="body-anim.begin + 2s" keysplines=".42 0 1 1; 0 0 .59 1; ',
                 '.42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',

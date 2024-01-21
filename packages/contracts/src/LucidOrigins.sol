@@ -8,22 +8,22 @@ import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
 import { Face } from "./layers/Face.sol";
 import { Body } from "./layers/Body.sol";
-import { Blob } from "./layers/Blob.sol";
+import { Head } from "./layers/Head.sol";
 import { Blush } from "./layers/Blush.sol";
 import { String } from "./utils/String.sol";
 import { Constants } from "./utils/constants.sol";
 
-contract LucidBlob is Owned, ERC721A, Background, Face, Body, Blob, Blush {
+contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
     using Encoder for string;
     using String for string;
     using String for uint256;
 
-    constructor() Owned(msg.sender) ERC721A("LucidBlob", "LucidBlob") { }
+    constructor() Owned(msg.sender) ERC721A("LucidOrigins", "LucidOrigins") { }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         uint16[] memory dna = getDna(uint256(keccak256(abi.encodePacked(tokenId))));
 
-        string memory name = string(abi.encodePacked("LucidBlob #", tokenId.uint2str()));
+        string memory name = string(abi.encodePacked("LucidOrigins #", tokenId.uint2str()));
         string memory header = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">';
 
         uint256 r = normalizeToRange(dna[Constants.BODY_R_INDEX], 1, 255);
@@ -47,7 +47,7 @@ contract LucidBlob is Owned, ERC721A, Background, Face, Body, Blob, Blush {
             linesColor
         );
 
-        (string memory blob, string memory blob2) = blob(
+        (string memory head, string memory head2) = head(
             normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 85, 90),
             normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 1, 2),
             normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 6, 8),
@@ -55,7 +55,7 @@ contract LucidBlob is Owned, ERC721A, Background, Face, Body, Blob, Blush {
         );
 
         (string memory body, string memory stroke, string memory baseBody) =
-            body(r, g, b, r2, g2, b2, blob, blob2, normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 0, 50));
+            body(r, g, b, r2, g2, b2, head, head2, normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 0, 50));
 
         string memory footer = "</svg>";
         string memory svg = string(abi.encodePacked(header, background, baseBody, body, stroke, blush(), face, footer));
@@ -64,7 +64,7 @@ contract LucidBlob is Owned, ERC721A, Background, Face, Body, Blob, Blush {
     }
 
     function metadata(string memory name, string memory svg) internal pure returns (string memory) {
-        string memory description = "LucidBlob, fully on-chain NFT";
+        string memory description = "LucidOrigins, fully on-chain NFT";
         string memory json = string(
             abi.encodePacked(
                 '{"name":"',
