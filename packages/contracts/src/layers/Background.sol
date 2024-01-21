@@ -1,9 +1,17 @@
 // SPDX-License-Identifier: GNU GPLv3
 pragma solidity 0.8.21;
 
-// import { console2 } from "forge-std/console2.sol";
+import { console2 } from "forge-std/console2.sol";
+import { String } from "../utils/String.sol";
 
 contract Background {
+    int256 constant ONE = int256(0x100000000);
+    uint256 constant USIZE = 100;
+    int256 constant SIZE = int256(USIZE);
+    int256 constant HALF_SIZE = SIZE / int256(2);
+
+    using String for uint256;
+
     string[20] internal bgColors = [
         "#FAF4EF",
         "#EFFAEF",
@@ -28,7 +36,30 @@ contract Background {
     ];
 
     function background(uint256 dnaBgLayer) internal view returns (string memory) {
-        return
-            string(abi.encodePacked('<rect x="0" y="0" width="100" height="100" fill="', bgColors[dnaBgLayer], '"/>'));
+        return string(abi.encodePacked('<rect x="0" y="0" width="100" height="100" fill="', bgColors[dnaBgLayer], '"/>'));
+        // return draw(dnaBgLayer, 1);
+    }
+
+    function draw(uint256 dnaBgLayer, uint256 index) internal view returns (string memory) {
+        string memory svg = "";
+
+        for (uint256 i = 0; i < USIZE; i++) {
+            for (uint256 j = 0; j < USIZE; j++) {
+                if (index == 1) {
+                    svg = string(
+                        abi.encodePacked(
+                            svg,
+                            "<rect x='",
+                            uint256(i * 10).uint2str(),
+                            "' y='",
+                            uint256(j * 10).uint2str(),
+                            "' width='10' height='10' fill='black' />"
+                        )
+                    );
+                }
+            }
+        }
+
+        return svg;
     }
 }

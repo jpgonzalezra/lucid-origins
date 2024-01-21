@@ -7,13 +7,12 @@ import { Owned } from "solmate/auth/Owned.sol";
 import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
 import { Face } from "./layers/Face.sol";
-import { Body } from "./layers/Body.sol";
 import { Head } from "./layers/Head.sol";
 import { Blush } from "./layers/Blush.sol";
 import { String } from "./utils/String.sol";
-import { Constants } from "./utils/constants.sol";
+import { Constants } from "./utils/common.sol";
 
-contract LucidBlob is Owned, ERC721A, Background, Face, Body, Head, Blush {
+contract LucidBlob is Owned, ERC721A, Background, Face, Head, Blush {
     using Encoder for string;
     using String for string;
     using String for uint256;
@@ -30,12 +29,13 @@ contract LucidBlob is Owned, ERC721A, Background, Face, Body, Head, Blush {
         uint256 g = normalizeToRange(dna[Constants.BODY_G_INDEX], 1, 255);
         uint256 b = normalizeToRange(dna[Constants.BODY_B_INDEX], 1, 255);
 
-        uint256 r2 = normalizeToRange(dna[Constants.EYE_SIZE_INDEX], 1, 255);
-        uint256 g2 = normalizeToRange(dna[Constants.EYE_POSITION_X_INDEX], 1, 255);
-        uint256 b2 = normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 1, 255);
+        // uint256 r2 = normalizeToRange(dna[Constants.EYE_SIZE_INDEX], 1, 255);
+        // uint256 g2 = normalizeToRange(dna[Constants.EYE_POSITION_X_INDEX], 1, 255);
+        // uint256 b2 = normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 1, 255);
         string memory linesColor = isColorDark(r, g, b) ? "#FFF" : "#000";
 
         string memory background = background(normalizeToRange(dna[Constants.BACKGROUND_INDEX], 0, 16));
+        // console2.log(background);
 
         string memory face = face(
             normalizeToRange(dna[Constants.EYE_SIZE_INDEX], 4, 7),
@@ -54,12 +54,22 @@ contract LucidBlob is Owned, ERC721A, Background, Face, Body, Head, Blush {
             normalizeToRange(dna[Constants.BLOB_EDGES_NUM_INDEX], 4, 12)
         );
 
-        (string memory body, string memory stroke, string memory baseBody) =
-            body(r, g, b, r2, g2, b2, head, head2, normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 0, 50));
+        (string memory colorDefs, string memory fillColor) = getColor(r, g, b, r, g, b, dna[12]);
 
         string memory footer = "</svg>";
-        string memory svg = string(abi.encodePacked(header, background, baseBody, body, stroke, blush(), face, footer));
+        string memory svg = string(
+            abi.encodePacked(
+                header,
+                background,
+                buildHead(colorDefs, fillColor, head, head2),
+                buildStroke(head, head2),
+                blush(),
+                face,
+                footer
+            )
+        );
 
+        console2.log(svg);
         return metadata(name, svg);
     }
 
@@ -71,7 +81,7 @@ contract LucidBlob is Owned, ERC721A, Background, Face, Body, Head, Blush {
                 name,
                 '","description":"',
                 description,
-                '","image": "data:image/svg+xml;base64,',
+                '","image": "data:imagesvg/+xml;base64,',
                 Encoder.base64(bytes(svg)),
                 '"}'
             )
@@ -115,5 +125,53 @@ contract LucidBlob is Owned, ERC721A, Background, Face, Body, Head, Blush {
 
     function isColorDark(uint256 r, uint256 g, uint256 b) public pure returns (bool) {
         return (2126 * r + 7152 * g + 722 * b) / 10_000 < 128;
+    }
+
+    function getColor(
+        uint256 r,
+        uint256 g,
+        uint256 b,
+        uint256 r2,
+        uint256 g2,
+        uint256 b2,
+        uint256 base
+    )
+        internal
+        pure
+        returns (string memory, string memory)
+    {
+        bool isPlain = base < 20;
+        string memory colorDefs = isPlain
+            ? ""
+            : string(
+                abi.encodePacked(
+                    "<defs>",
+                    '<linearGradient id="linear-grad">',
+                    '<stop offset="0" stop-color="',
+                    "rgb(",
+                    r.uint2str(),
+                    ",",
+                    g.uint2str(),
+                    ",",
+                    b.uint2str(),
+                    ')"/>',
+                    '<stop offset="1" stop-color="',
+                    "rgb(",
+                    r2.uint2str(),
+                    ",",
+                    g2.uint2str(),
+                    ",",
+                    b2.uint2str(),
+                    ')"/>',
+                    "</linearGradient>",
+                    "</defs>"
+                )
+            );
+
+        string memory fillColor = isPlain
+            ? string(abi.encodePacked("rgb(", r.uint2str(), ",", g.uint2str(), ",", b.uint2str(), ")"))
+            : "url(#linear-grad)";
+
+        return (colorDefs, fillColor);
     }
 }

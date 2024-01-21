@@ -6,14 +6,14 @@ import { String } from "../utils/String.sol";
 import { Trigonometry } from "solidity-trigonometry/Trigonometry.sol";
 
 contract Head {
+    using String for int256;
+    using String for uint256;
+    using Trigonometry for uint256;
+
     struct Point {
         int256 x;
         int256 y;
     }
-
-    using String for int256;
-    using String for uint256;
-    using Trigonometry for uint256;
 
     function head(
         uint256 size,
@@ -26,7 +26,7 @@ contract Head {
         returns (string memory, string memory)
     {
         Point[] memory points = createPoints(size, minGrowth, edgesNum);
-        return (createSvgPath(points), createSvgPath(createPoints(size + animation, minGrowth, edgesNum)));
+        return (createHeadPath(points), createHeadPath(createPoints(size + animation, minGrowth, edgesNum)));
     }
 
     function createPoints(uint256 size, uint256 minGrowth, uint256 edgesNum) internal view returns (Point[] memory) {
@@ -65,7 +65,7 @@ contract Head {
         return (random >= minv) ? random : minv + (random % (maxv - minv));
     }
 
-    function createSvgPath(Point[] memory points) internal pure returns (string memory) {
+    function createHeadPath(Point[] memory points) internal pure returns (string memory) {
         string memory svgPath;
         Point memory mid = Point({ x: (points[0].x + points[1].x) / 2, y: (points[0].y + points[1].y) / 2 });
 
@@ -92,5 +92,63 @@ contract Head {
         }
 
         return string(abi.encodePacked(svgPath, "Z"));
+    }
+
+    function buildHead(
+        string memory colorDefs,
+        string memory fillColor,
+        string memory blob,
+        string memory blob2
+    )
+        internal
+        pure
+        returns (string memory)
+    {
+        return string(
+            abi.encodePacked(
+                colorDefs,
+                '<path id="head" d="',
+                blob,
+                'Z" transform-origin="center" fill="',
+                fillColor,
+                '">',
+                '<animate attributeName="d" values="',
+                blob,
+                ";",
+                blob2,
+                ";",
+                blob,
+                '" dur="15s" id="body-anim" repeatCount="indefinite"',
+                ' keysplines=".42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;',
+                ' .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
+                '<animateTransform attributeName="transform" type="rotate" ',
+                'from="0" to="10" dur="1000" repeatCount="indefinite" />',
+                "</path>"
+            )
+        );
+    }
+
+    function buildStroke(string memory blob, string memory blob2) internal pure returns (string memory) {
+        return string(
+            abi.encodePacked(
+                '<path d="',
+                blob,
+                'Z" id="head-stroke" stroke="',
+                "black",
+                '" stroke-width="2" fill="none" transform-origin="center">',
+                '<animate attributeName="d" values="',
+                blob,
+                ";",
+                blob2,
+                ";",
+                blob,
+                '" dur="16s" id="stroke-anim" repeatCount="indefinite" ',
+                'begin="body-anim.begin + 2s" keysplines=".42 0 1 1; 0 0 .59 1; ',
+                '.42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
+                '<animateTransform attributeName="transform" type="rotate" from="0" ',
+                'to="30" dur="1000" repeatCount="indefinite" />',
+                "</path>"
+            )
+        );
     }
 }
