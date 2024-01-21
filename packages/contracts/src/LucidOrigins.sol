@@ -47,10 +47,10 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
         );
 
         (string memory head, string memory head2) = head(
-            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 85, 90),
-            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 1, 2),
-            normalizeToRange(dna[Constants.HEAD_MIN_GROWTH_INDEX], 6, 8),
-            normalizeToRange(dna[Constants.HEAD_EDGES_NUM_INDEX], 4, 12)
+            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 85, 88),
+            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 0, 2),
+            normalizeToRange(dna[Constants.HEAD_MIN_GROWTH_INDEX], 6, 9),
+            normalizeToRange(dna[Constants.HEAD_EDGES_NUM_INDEX], 7, 9)
         );
 
         (string memory body, string memory stroke, string memory baseBody) =
