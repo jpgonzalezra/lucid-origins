@@ -5,7 +5,7 @@ pragma solidity 0.8.21;
 import { String } from "../utils/String.sol";
 import { Trigonometry } from "solidity-trigonometry/Trigonometry.sol";
 
-contract Blob {
+contract Head {
     struct Point {
         int256 x;
         int256 y;
@@ -15,7 +15,7 @@ contract Blob {
     using String for uint256;
     using Trigonometry for uint256;
 
-    function blob(
+    function head(
         uint256 size,
         uint256 animation,
         uint256 minGrowth,

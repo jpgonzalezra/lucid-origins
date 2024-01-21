@@ -24,7 +24,6 @@ contract Body {
         returns (string memory, string memory, string memory)
     {
         (string memory colorDefs, string memory fillColor) = getColor(r, g, b, r2, g2, b2, base);
-        // string memory baseBody = getBaseBody(colorDefs, fillColor, blob, blob2);
 
         return (getBody(colorDefs, fillColor, blob, blob2), getStroke(blob, blob2), getBaseBody(colorDefs, fillColor));
     }
