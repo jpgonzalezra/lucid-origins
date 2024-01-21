@@ -2,11 +2,10 @@
 pragma solidity 0.8.21;
 
 // import { console2 } from "forge-std/console2.sol";
-import { String } from "../utils/String.sol";
+import { LibString } from "solmate/utils/LibString.sol";
 
 contract Body {
-    using String for uint256;
-    using String for int256;
+    using LibString for uint256;
 
     function body(
         uint256 r,
@@ -49,19 +48,19 @@ contract Body {
                     '<linearGradient id="linear-grad">',
                     '<stop offset="0" stop-color="',
                     "rgb(",
-                    r.uint2str(),
+                    r.toString(),
                     ",",
-                    g.uint2str(),
+                    g.toString(),
                     ",",
-                    b.uint2str(),
+                    b.toString(),
                     ')"/>',
                     '<stop offset="1" stop-color="',
                     "rgb(",
-                    r2.uint2str(),
+                    r2.toString(),
                     ",",
-                    g2.uint2str(),
+                    g2.toString(),
                     ",",
-                    b2.uint2str(),
+                    b2.toString(),
                     ')"/>',
                     "</linearGradient>",
                     "</defs>"
@@ -69,7 +68,7 @@ contract Body {
             );
 
         string memory fillColor = isPlain
-            ? string(abi.encodePacked("rgb(", r.uint2str(), ",", g.uint2str(), ",", b.uint2str(), ")"))
+            ? string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",", b.toString(), ")"))
             : "url(#linear-grad)";
 
         return (colorDefs, fillColor);

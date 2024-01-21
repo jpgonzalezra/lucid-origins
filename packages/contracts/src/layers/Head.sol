@@ -2,7 +2,7 @@
 pragma solidity 0.8.21;
 
 // import { console2 } from "forge-std/console2.sol";
-import { String } from "../utils/String.sol";
+import { LibString } from "solmate/utils/LibString.sol";
 import { Trigonometry } from "solidity-trigonometry/Trigonometry.sol";
 
 contract Head {
@@ -11,8 +11,7 @@ contract Head {
         int256 y;
     }
 
-    using String for int256;
-    using String for uint256;
+    using LibString for int256;
     using Trigonometry for uint256;
 
     function head(
@@ -69,7 +68,7 @@ contract Head {
         string memory svgPath;
         Point memory mid = Point({ x: (points[0].x + points[1].x) / 2, y: (points[0].y + points[1].y) / 2 });
 
-        svgPath = string(abi.encodePacked("M", mid.x.int2str(), ",", mid.y.int2str()));
+        svgPath = string(abi.encodePacked("M", mid.x.toString(), ",", mid.y.toString()));
 
         for (uint256 i = 0; i < points.length; i++) {
             Point memory p1 = points[(i + 1) % points.length];
@@ -80,13 +79,13 @@ contract Head {
                 abi.encodePacked(
                     svgPath,
                     "Q",
-                    p1.x.int2str(),
+                    p1.x.toString(),
                     ",",
-                    p1.y.int2str(),
+                    p1.y.toString(),
                     ",",
-                    midPoint.x.int2str(),
+                    midPoint.x.toString(),
                     ",",
-                    midPoint.y.int2str()
+                    midPoint.y.toString()
                 )
             );
         }

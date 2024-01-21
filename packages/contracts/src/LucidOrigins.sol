@@ -10,20 +10,19 @@ import { Face } from "./layers/Face.sol";
 import { Body } from "./layers/Body.sol";
 import { Head } from "./layers/Head.sol";
 import { Blush } from "./layers/Blush.sol";
-import { String } from "./utils/String.sol";
+import { LibString } from "solmate/utils/LibString.sol";
 import { Constants } from "./utils/constants.sol";
 
 contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
     using Encoder for string;
-    using String for string;
-    using String for uint256;
+    using LibString for uint256;
 
     constructor() Owned(msg.sender) ERC721A("LucidOrigins", "LucidOrigins") { }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         uint16[] memory dna = getDna(uint256(keccak256(abi.encodePacked(tokenId))));
 
-        string memory name = string(abi.encodePacked("LucidOrigins #", tokenId.uint2str()));
+        string memory name = string(abi.encodePacked("LucidOrigins #", tokenId.toString()));
         string memory header = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">';
 
         uint256 r = normalizeToRange(dna[Constants.R_INDEX], 1, 255);
