@@ -2,18 +2,26 @@
 pragma solidity 0.8.21;
 
 library Constants {
-    uint256 public constant BACKGROUND_INDEX = 0;
+    uint16 public constant BACKGROUND_INDEX = 0;
 
-    uint256 public constant EYE_SIZE_INDEX = 1;
-    uint256 public constant EYE_DNA_LAYER_INDEX = 2;
-    uint256 public constant EYE_POSITION_X_INDEX = 3;
-    uint256 public constant EYE_POSITION_Y_INDEX = 4;
+    // FACE
+    uint16 public constant EYE_RADIUS_INDEX = 1;
+    uint16 public constant EYE_BROW_LENGHT_INDEX = 2;
+    uint16 public constant EYE_SEPARATION_INDEX = 3;
+    uint16 public constant EYE_BROW_ROTATION_INDEX = 4;
+    uint16 public constant EYE_BROW_SIZE_INDEX = 5;
+    uint16 public constant MOUNTH_ROTATION = 6;
 
-    uint256 public constant BLOB_SIZE_INDEX = 5;
-    uint256 public constant BLOB_MIN_GROWTH_INDEX = 6;
-    uint256 public constant BLOB_EDGES_NUM_INDEX = 7;
+    //HEAD
+    uint16 public constant HEAD_SIZE_INDEX = 7;
+    uint16 public constant HEAD_MIN_GROWTH_INDEX = 8;
+    uint16 public constant HEAD_EDGES_NUM_INDEX = 9;
 
-    uint256 public constant BODY_R_INDEX = 8;
-    uint256 public constant BODY_G_INDEX = 9;
-    uint256 public constant BODY_B_INDEX = 10;
+    uint16 public constant R_INDEX = 10;
+    uint16 public constant G_INDEX = 11;
+    uint16 public constant B_INDEX = 12;
+
+    uint16 public constant R2_INDEX = 13;
+    uint16 public constant G2_INDEX = 14;
+    uint16 public constant B2_INDEX = 15;
 }

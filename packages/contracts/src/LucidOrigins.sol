@@ -26,36 +26,36 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
         string memory name = string(abi.encodePacked("LucidOrigins #", tokenId.uint2str()));
         string memory header = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">';
 
-        uint256 r = normalizeToRange(dna[Constants.BODY_R_INDEX], 1, 255);
-        uint256 g = normalizeToRange(dna[Constants.BODY_G_INDEX], 1, 255);
-        uint256 b = normalizeToRange(dna[Constants.BODY_B_INDEX], 1, 255);
+        uint256 r = normalizeToRange(dna[Constants.R_INDEX], 1, 255);
+        uint256 g = normalizeToRange(dna[Constants.G_INDEX], 1, 255);
+        uint256 b = normalizeToRange(dna[Constants.B_INDEX], 1, 255);
 
-        uint256 r2 = normalizeToRange(dna[Constants.EYE_SIZE_INDEX], 1, 255);
-        uint256 g2 = normalizeToRange(dna[Constants.EYE_POSITION_X_INDEX], 1, 255);
-        uint256 b2 = normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 1, 255);
-        string memory linesColor = isColorDark(r, g, b) ? "#FFF" : "#000";
+        uint256 r2 = normalizeToRange(dna[Constants.R2_INDEX], 1, 255);
+        uint256 g2 = normalizeToRange(dna[Constants.G2_INDEX], 1, 255);
+        uint256 b2 = normalizeToRange(dna[Constants.B2_INDEX], 1, 255);
 
         string memory background = background(normalizeToRange(dna[Constants.BACKGROUND_INDEX], 0, 16));
 
+        string memory linesColor = isColorDark(r, g, b) ? "#FFF" : "#000";
         string memory face = face(
-            normalizeToRange(dna[Constants.EYE_SIZE_INDEX], 4, 7),
-            normalizeToRange(dna[Constants.EYE_DNA_LAYER_INDEX], 1, 4),
-            normalizeToRange(dna[Constants.EYE_POSITION_X_INDEX], 20, 30),
-            normalizeToRange(dna[Constants.EYE_POSITION_Y_INDEX], 0, 20),
-            normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 0, 6),
-            normalizeToRange(dna[Constants.BLOB_EDGES_NUM_INDEX], 1, 5),
+            normalizeToRange(dna[Constants.EYE_RADIUS_INDEX], 4, 7),
+            normalizeToRange(dna[Constants.EYE_BROW_LENGHT_INDEX], 1, 4),
+            normalizeToRange(dna[Constants.EYE_SEPARATION_INDEX], 20, 30),
+            normalizeToRange(dna[Constants.EYE_BROW_ROTATION_INDEX], 0, 20),
+            normalizeToRange(dna[Constants.MOUNTH_ROTATION], 0, 6),
+            normalizeToRange(dna[Constants.EYE_BROW_SIZE_INDEX], 1, 5),
             linesColor
         );
 
         (string memory head, string memory head2) = head(
-            normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 85, 90),
-            normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 1, 2),
-            normalizeToRange(dna[Constants.BLOB_MIN_GROWTH_INDEX], 6, 8),
-            normalizeToRange(dna[Constants.BLOB_EDGES_NUM_INDEX], 4, 12)
+            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 85, 90),
+            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 1, 2),
+            normalizeToRange(dna[Constants.HEAD_MIN_GROWTH_INDEX], 6, 8),
+            normalizeToRange(dna[Constants.HEAD_EDGES_NUM_INDEX], 4, 12)
         );
 
         (string memory body, string memory stroke, string memory baseBody) =
-            body(r, g, b, r2, g2, b2, head, head2, normalizeToRange(dna[Constants.BLOB_SIZE_INDEX], 0, 50));
+            body(r, g, b, r2, g2, b2, head, head2, normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 0, 50));
 
         string memory footer = "</svg>";
         string memory svg = string(abi.encodePacked(header, background, baseBody, body, stroke, blush(), face, footer));
