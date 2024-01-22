@@ -37,28 +37,29 @@ contract Head {
 
         uint256 outerRad = size / 2;
         uint256 innerRad = minGrowth * (outerRad / 10);
-        uint256 center = size / 2;
+        uint256 x = 50;
+        uint256 y = outerRad < 35 ? 45 : 50;
         uint256 deg = 360 / edgesNum;
 
         for (uint256 i = 0; i < edgesNum; i++) {
             uint256 degree = i * deg;
             uint256 radius = randPoint(i, innerRad, outerRad);
-            Point memory point = calculatePoint(center, radius, degree);
+            Point memory point = calculatePoint(x, y, radius, degree);
             points[i] = point;
         }
 
         return points;
     }
 
-    function calculatePoint(uint256 origin, uint256 radius, uint256 degree) internal pure returns (Point memory) {
+    function calculatePoint(uint256 _x, uint256 _y, uint256 radius, uint256 degree) internal pure returns (Point memory) {
         uint256 scaledDegree = degree * 1e18;
         uint256 scaledPI = Trigonometry.PI;
 
         int256 cosValue = uint256(scaledDegree * scaledPI / 180 / 1e18).cos();
         int256 sinValue = (scaledDegree * scaledPI / 180 / 1e18).sin();
 
-        int256 x = int256(origin) + int256(radius) * cosValue / 1e18;
-        int256 y = int256(origin) + int256(radius) * sinValue / 1e18;
+        int256 x = int256(_x) + int256(radius) * cosValue / 1e18;
+        int256 y = int256(_y) + int256(radius) * sinValue / 1e18;
 
         return Point(x, y);
     }
@@ -121,11 +122,11 @@ contract Head {
                 h2,
                 ";",
                 h1,
-                '" dur="15s" id="body-anim" repeatCount="indefinite"',
+                '" dur="30s" id="body-anim" repeatCount="indefinite"',
                 ' keysplines=".42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;',
                 ' .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
                 '<animateTransform attributeName="transform" type="rotate" ',
-                'from="0" to="30" dur="1000" repeatCount="indefinite" />',
+                'from="0" to="100" dur="1000" repeatCount="indefinite" />',
                 "</path>"
             )
         );

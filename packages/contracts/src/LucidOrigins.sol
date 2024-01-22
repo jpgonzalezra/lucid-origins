@@ -36,6 +36,7 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
         string memory background = background(normalizeToRange(dna[Constants.BACKGROUND_INDEX], 0, 16));
 
         string memory linesColor = isColorDark(r, g, b) ? "#FFF" : "#000";
+
         string memory face = face(
             normalizeToRange(dna[Constants.EYE_RADIUS_INDEX], 4, 7),
             normalizeToRange(dna[Constants.EYE_BROW_LENGHT_INDEX], 2, 4),
@@ -48,18 +49,33 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
 
         (string memory colorDefs, string memory fillColor) =
             getColor(r, g, b, r2, g2, b2, normalizeToRange(dna[Constants.BASE_INDEX], 0, 100));
+
         string memory head = head(
-            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 80, 88),
+            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 60, 78),
             normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 1, 3),
             normalizeToRange(dna[Constants.HEAD_MIN_GROWTH_INDEX], 6, 9),
-            normalizeToRange(dna[Constants.HEAD_EDGES_NUM_INDEX], 7, 20),
+            normalizeToRange(dna[Constants.HEAD_EDGES_NUM_INDEX], 5, 15),
             colorDefs,
             fillColor
         );
 
         string memory footer = "</svg>";
+
+        string[] memory deg = new string[](4);
+        deg[0] = "0";
+        deg[1] = "90";
+        deg[2] = "180";
+        deg[3] = "-90";
+        uint256 scale = 99;//normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 70, 99);
+        uint256 translate = 100 - scale;
+        uint256 rotate = 50 + translate;
+        uint256 place = normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 0, 3);
+        
+
         string memory svg =
-            string(abi.encodePacked(header, background, body(colorDefs, fillColor), head, blush(), face, footer));
+            string(abi.encodePacked(header, background, '<g transform="scale(0.',scale.toString(),') rotate(',deg[place],', ', rotate.toString(),', ', rotate.toString(), ') translate(',translate.toString(),' ',translate.toString(),')">', body(colorDefs, fillColor), head, face, blush(), "</g>", footer));
+
+        console2.log("svg: %s", svg);
 
         return metadata(name, svg);
     }
