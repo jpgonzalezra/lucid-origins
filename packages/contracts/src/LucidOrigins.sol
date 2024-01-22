@@ -38,7 +38,7 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
         string memory linesColor = isColorDark(r, g, b) ? "#FFF" : "#000";
         string memory face = face(
             normalizeToRange(dna[Constants.EYE_RADIUS_INDEX], 4, 7),
-            normalizeToRange(dna[Constants.EYE_BROW_LENGHT_INDEX], 1, 4),
+            normalizeToRange(dna[Constants.EYE_BROW_LENGHT_INDEX], 2, 4),
             normalizeToRange(dna[Constants.EYE_SEPARATION_INDEX], 20, 30),
             normalizeToRange(dna[Constants.EYE_BROW_ROTATION_INDEX], 0, 20),
             normalizeToRange(dna[Constants.MOUNTH_ROTATION], 0, 6),
@@ -46,10 +46,11 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
             linesColor
         );
 
-        (string memory colorDefs, string memory fillColor) = getColor(r, g, b, r2, g2, b2, dna[Constants.BASE_INDEX]);
-        (string memory head, string memory stroke) = head(
-            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 85, 88),
-            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 0, 2),
+        (string memory colorDefs, string memory fillColor) =
+            getColor(r, g, b, r2, g2, b2, normalizeToRange(dna[Constants.BASE_INDEX], 0, 100));
+        string memory head = head(
+            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 80, 88),
+            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 1, 3),
             normalizeToRange(dna[Constants.HEAD_MIN_GROWTH_INDEX], 6, 9),
             normalizeToRange(dna[Constants.HEAD_EDGES_NUM_INDEX], 7, 20),
             colorDefs,
@@ -57,9 +58,8 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
         );
 
         string memory footer = "</svg>";
-        string memory svg = string(
-            abi.encodePacked(header, background, body(colorDefs, fillColor), head, stroke, blush(), face, footer)
-        );
+        string memory svg =
+            string(abi.encodePacked(header, background, body(colorDefs, fillColor), head, blush(), face, footer));
 
         return metadata(name, svg);
     }
@@ -131,7 +131,7 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
         pure
         returns (string memory, string memory)
     {
-        bool isPlain = base < 20;
+        bool isPlain = base < 80;
         string memory colorDefs = isPlain
             ? ""
             : string(

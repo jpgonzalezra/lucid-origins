@@ -24,12 +24,12 @@ contract Head {
     )
         internal
         view
-        returns (string memory, string memory)
+        returns (string memory)
     {
         Point[] memory points = createPoints(size, minGrowth, edgesNum);
         string memory h1 = createSvgPath(points);
         string memory h2 = createSvgPath(createPoints(size + animation, minGrowth, edgesNum));
-        return (buildHead(colorDefs, fillColor, h1, h2), buildStroke(h1, h2));
+        return buildHead(colorDefs, fillColor, h1, h2);
     }
 
     function createPoints(uint256 size, uint256 minGrowth, uint256 edgesNum) internal view returns (Point[] memory) {
@@ -112,7 +112,7 @@ contract Head {
                 colorDefs,
                 '<path id="head" d="',
                 h1,
-                'Z" transform-origin="center" fill="',
+                'Z" stroke-width="2" stroke="black" transform-origin="center" fill="',
                 fillColor,
                 '">',
                 '<animate attributeName="d" values="',
@@ -125,31 +125,7 @@ contract Head {
                 ' keysplines=".42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;',
                 ' .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
                 '<animateTransform attributeName="transform" type="rotate" ',
-                'from="0" to="10" dur="1000" repeatCount="indefinite" />',
-                "</path>"
-            )
-        );
-    }
-
-    function buildStroke(string memory h, string memory h2) private pure returns (string memory) {
-        return string(
-            abi.encodePacked(
-                '<path d="',
-                h,
-                'Z" id="body-stroke" stroke="',
-                "black",
-                '" stroke-width="2" fill="none" transform-origin="center">',
-                '<animate attributeName="d" values="',
-                h,
-                ";",
-                h2,
-                ";",
-                h,
-                '" dur="16s" id="stroke-anim" repeatCount="indefinite" ',
-                'begin="body-anim.begin + 2s" keysplines=".42 0 1 1; 0 0 .59 1; ',
-                '.42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
-                '<animateTransform attributeName="transform" type="rotate" from="0" ',
-                'to="30" dur="1000" repeatCount="indefinite" />',
+                'from="0" to="30" dur="1000" repeatCount="indefinite" />',
                 "</path>"
             )
         );
