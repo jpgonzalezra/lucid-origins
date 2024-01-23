@@ -5,6 +5,7 @@ pragma solidity 0.8.21;
 import { LibString } from "solmate/utils/LibString.sol";
 import { Trigonometry } from "solidity-trigonometry/Trigonometry.sol";
 
+
 contract Head {
     struct Point {
         int256 x;

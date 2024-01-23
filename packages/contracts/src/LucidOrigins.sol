@@ -38,13 +38,16 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
         string memory linesColor = isColorDark(r, g, b) ? "#FFF" : "#000";
 
         string memory face = face(
-            normalizeToRange(dna[Constants.EYE_RADIUS_INDEX], 4, 7),
+            normalizeToRange(dna[Constants.EYE_RADIUS_INDEX], 7, 7),
             normalizeToRange(dna[Constants.EYE_BROW_LENGHT_INDEX], 2, 4),
-            normalizeToRange(dna[Constants.EYE_SEPARATION_INDEX], 20, 30),
+            normalizeToRange(dna[Constants.EYE_SEPARATION_INDEX], 20, 25),
             normalizeToRange(dna[Constants.EYE_BROW_ROTATION_INDEX], 0, 20),
             normalizeToRange(dna[Constants.MOUNTH_ROTATION], 0, 6),
             normalizeToRange(dna[Constants.EYE_BROW_SIZE_INDEX], 1, 5),
-            linesColor
+            linesColor,
+            r2,
+            g2,
+            b2
         );
 
         (string memory colorDefs, string memory fillColor) =
@@ -59,9 +62,18 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
             fillColor
         );
 
+        string memory body = body(
+            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 95, 125),
+            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 1, 3),
+            normalizeToRange(dna[Constants.HEAD_MIN_GROWTH_INDEX], 9, 12),
+            normalizeToRange(dna[Constants.HEAD_EDGES_NUM_INDEX], 10, 55),
+            colorDefs,
+            fillColor
+        );
+
         string memory footer = "</svg>";
 
-        string memory svgContent = string(abi.encodePacked(body(colorDefs, fillColor), head, face, blush()));
+        string memory svgContent = string(abi.encodePacked(body, head, face, blush()));
 
         uint256 rotation = normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 0, 3);
         string memory svg = string(abi.encodePacked(header, background, rotationWrapper(rotation, svgContent), footer));
