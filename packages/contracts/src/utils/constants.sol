@@ -26,4 +26,5 @@ library Constants {
     uint16 public constant B2_INDEX = 15;
 
     uint16 public constant BASE_INDEX = 16;
+    uint16 public constant CHAR_ROTATION_INDEX = 17;
 }

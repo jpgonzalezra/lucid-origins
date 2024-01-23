@@ -61,23 +61,21 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
 
         string memory footer = "</svg>";
 
-        string[] memory deg = new string[](4);
-        deg[0] = "0";
-        deg[1] = "90";
-        deg[2] = "180";
-        deg[3] = "-90";
-        uint256 scale = 99;//normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 70, 99);
-        uint256 translate = 100 - scale;
-        uint256 rotate = 50 + translate;
-        uint256 place = normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 0, 3);
-        
+        string memory svgContent = string(abi.encodePacked(body(colorDefs, fillColor), head, face, blush()));
 
-        string memory svg =
-            string(abi.encodePacked(header, background, '<g transform="scale(0.',scale.toString(),') rotate(',deg[place],', ', rotate.toString(),', ', rotate.toString(), ') translate(',translate.toString(),' ',translate.toString(),')">', body(colorDefs, fillColor), head, face, blush(), "</g>", footer));
-
-        console2.log("svg: %s", svg);
+        uint256 rotation = normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 0, 3);
+        string memory svg = string(abi.encodePacked(header, background, rotationWrapper(rotation, svgContent), footer));
 
         return metadata(name, svg);
+    }
+
+    function rotationWrapper(uint256 rotation, string memory content) internal pure returns (string memory) {
+        string memory rotationDegree = rotation == 0 ? "0" : rotation == 1 ? "90" : rotation == 2 ? "180" : "-90";
+        return string(
+            abi.encodePacked(
+                '<g transform="scale(0.99) rotate(', rotationDegree, ", 50, 50) translate(0 0)\">", content, "</g>"
+            )
+        );
     }
 
     function metadata(string memory name, string memory svg) internal pure returns (string memory) {
