@@ -14,22 +14,75 @@ contract Face {
         uint256 eyebrowRotation,
         uint256 mouthRotation,
         uint256 eyebrowSize,
-        string memory linesColor
+        string memory linesColor,
+        uint256 r,
+        uint256 g,
+        uint256 b
     )
         internal
         pure
         returns (string memory)
     {
-        string memory eyes = getEyes(eyeRadius, eyeSeparation, eyebrowRotation, linesColor);
-        string memory eyebrows = getEyebrows(eyebrowLength, eyebrowRotation, eyebrowSize, mouthRotation, linesColor);
-        string memory mouth = getMouth(eyeSeparation, eyebrowRotation, eyebrowSize, mouthRotation, linesColor);
+        string memory eyes = getEyes(eyeRadius, eyeSeparation, mouthRotation, eyebrowRotation, r, g, b);
+        //string memory eyebrows = getEyebrows(eyebrowLength, eyebrowRotation, eyebrowSize, mouthRotation, linesColor);
+        //string memory mouth = getMouth(eyeSeparation, eyebrowRotation, eyebrowSize, mouthRotation, linesColor);
 
         return string(
-            abi.encodePacked('<g id="face" transform="scale(0.6) translate(25 25)">', eyes, eyebrows, mouth, "</g>")
+            // abi.encodePacked('<g id="face" transform="scale(0.6) translate(30 30)">', eyes, eyebrows, mouth, "</g>")
+            abi.encodePacked('<g id="face" >', eyes, /*eyebrows, mouth,*/ "</g>")
         );
     }
 
     function getEyes(
+        uint256 eyeRadius,
+        uint256 eyeSeparation,
+        uint256 pupilRadius,
+        uint256 pupilColor,
+        uint256 r,
+        uint256 g,
+        uint256 b
+    )
+        internal
+        pure
+        returns (string memory)
+    {
+        // string memory pupilAlternativeColor = string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",",
+        // b.toString(), ")"));
+        return string(
+            abi.encodePacked(
+                '<g id="face">',
+                '<circle cx="',
+                (50 - eyeSeparation / 2).toString(),
+                '" cy="40" r="',
+                eyeRadius.toString(),
+                '" fill="white"/>',
+                '<circle cx="',
+                (50 - eyeSeparation / 2).toString(),
+                '" cy="40" r="',
+                (pupilRadius < 3 ? 0 : pupilRadius).toString(),
+                '" fill="',
+                pupilColor > 15
+                    ? string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",", b.toString(), ")"))
+                    : "black",
+                '"/>' '<circle cx="',
+                (50 + eyeSeparation / 2).toString(),
+                '" cy="40" r="',
+                eyeRadius.toString(),
+                '" fill="white"/>',
+                '<circle cx="',
+                (50 + eyeSeparation / 2).toString(),
+                '" cy="40" r="',
+                (pupilRadius < 3 ? 0 : pupilRadius).toString(),
+                '" fill="',
+                pupilColor > 15
+                    ? string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",", b.toString(), ")"))
+                    : "black",
+                '"/>' "</g>"
+            )
+        );
+    }
+
+    function _getEyes(
         uint256 eyeRadius,
         uint256 eyeSeparation,
         uint256 eyebrowRotation,
@@ -41,7 +94,7 @@ contract Face {
     {
         return string(
             abi.encodePacked(
-                '<g id="face">',
+                '<g id="eyes">',
                 '<circle cx="',
                 (50 - eyeSeparation / 2).toString(),
                 '" cy="40" r="',
@@ -95,7 +148,7 @@ contract Face {
                 (30 - eyebrowLength).toString(),
                 '" stroke="',
                 linesColor,
-                '" stroke-width="4" stroke-linecap="round" transform="rotate(',
+                '" stroke-width="2" stroke-linecap="round" transform="rotate(',
                 eyebrowRotation.toString(),
                 " 35 ",
                 (30 - eyebrowLength).toString(),
@@ -112,7 +165,7 @@ contract Face {
                 (30 - eyebrowLength).toString(),
                 '" stroke="',
                 linesColor,
-                '" stroke-width="4" stroke-linecap="round" transform="rotate(',
+                '" stroke-width="2" stroke-linecap="round" transform="rotate(',
                 eyebrowRotation.toString(),
                 " 65 ",
                 (30 - eyebrowLength).toString(),
@@ -162,7 +215,7 @@ contract Face {
                 y3.toString(),
                 '" stroke="',
                 linesColor,
-                '" stroke-width="4" fill="transparent" stroke-linecap="round" transform="rotate(',
+                '" stroke-width="2" fill="transparent" stroke-linecap="round" transform="rotate(',
                 mouthRotation.toString(),
                 " 50 ",
                 (50 + controlY).toString(),
