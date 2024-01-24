@@ -4,7 +4,6 @@ pragma solidity 0.8.21;
 import { Blob } from "./Blob.sol";
 
 contract Head is Blob {
-
     function head(
         uint256 size,
         uint256 animation,
@@ -17,13 +16,12 @@ contract Head is Blob {
         view
         returns (string memory)
     {
-        Point[] memory points = createPoints(size, minGrowth, edgesNum);
-        string memory h1 = createSvgPath(points);
-        string memory h2 = createSvgPath(createPoints(size + animation, minGrowth, edgesNum));
-        return build("head", colorDefs, fillColor, h1, h2);
-    }
+        uint256 x = 50;
+        uint256 y = 0;
 
-    function calculatePointY(uint256 outerRad) internal view virtual override returns (uint256 y) {
-        y = outerRad < 35 ? 45 : 50;
+        Point[] memory points = createPoints(size, x, y, minGrowth, edgesNum);
+        string memory h1 = createSvgPath(points);
+        string memory h2 = createSvgPath(createPoints(size + animation, x, y, minGrowth, edgesNum));
+        return build("head", colorDefs, fillColor, h1, h2);
     }
 }

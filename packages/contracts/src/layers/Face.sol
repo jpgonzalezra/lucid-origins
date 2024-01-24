@@ -24,12 +24,12 @@ contract Face {
         returns (string memory)
     {
         string memory eyes = getEyes(eyeRadius, eyeSeparation, mouthRotation, eyebrowRotation, r, g, b);
-        string memory eyebrows = getEyebrows(eyebrowLength, eyebrowRotation, eyebrowSize, mouthRotation, linesColor);
-        string memory mouth = getMouth(eyeSeparation, eyebrowRotation, eyebrowSize, mouthRotation, linesColor);
+        //string memory eyebrows = getEyebrows(eyebrowLength, eyebrowRotation, eyebrowSize, mouthRotation, linesColor);
+        //string memory mouth = getMouth(eyeSeparation, eyebrowRotation, eyebrowSize, mouthRotation, linesColor);
 
         return string(
             // abi.encodePacked('<g id="face" transform="scale(0.6) translate(30 30)">', eyes, eyebrows, mouth, "</g>")
-            abi.encodePacked('<g id="face" >', eyes, eyebrows, mouth, "</g>")
+            abi.encodePacked('<g id="face" >', eyes, /*eyebrows, mouth,*/ "</g>")
         );
     }
 
@@ -46,7 +46,8 @@ contract Face {
         pure
         returns (string memory)
     {
-        // string memory pupilAlternativeColor = string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",", b.toString(), ")"));
+        // string memory pupilAlternativeColor = string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",",
+        // b.toString(), ")"));
         return string(
             abi.encodePacked(
                 '<g id="face">',
@@ -56,25 +57,27 @@ contract Face {
                 eyeRadius.toString(),
                 '" fill="white"/>',
                 '<circle cx="',
-                (50 - eyeSeparation / 2 ).toString(),
+                (50 - eyeSeparation / 2).toString(),
                 '" cy="40" r="',
                 (pupilRadius < 3 ? 0 : pupilRadius).toString(),
                 '" fill="',
-                pupilColor > 15 ? string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",", b.toString(), ")")) : "black",
-                '"/>'
-                '<circle cx="',
+                pupilColor > 15
+                    ? string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",", b.toString(), ")"))
+                    : "black",
+                '"/>' '<circle cx="',
                 (50 + eyeSeparation / 2).toString(),
                 '" cy="40" r="',
                 eyeRadius.toString(),
                 '" fill="white"/>',
                 '<circle cx="',
-                (50 + eyeSeparation / 2 ).toString(),
+                (50 + eyeSeparation / 2).toString(),
                 '" cy="40" r="',
                 (pupilRadius < 3 ? 0 : pupilRadius).toString(),
                 '" fill="',
-                pupilColor > 15 ? string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",", b.toString(), ")")) : "black",
-                '"/>'
-                "</g>"
+                pupilColor > 15
+                    ? string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",", b.toString(), ")"))
+                    : "black",
+                '"/>' "</g>"
             )
         );
     }

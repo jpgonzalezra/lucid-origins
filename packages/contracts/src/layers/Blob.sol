@@ -5,7 +5,7 @@ pragma solidity 0.8.21;
 import { LibString } from "solmate/utils/LibString.sol";
 import { Trigonometry } from "solidity-trigonometry/Trigonometry.sol";
 
-abstract contract Blob {
+contract Blob {
     struct Point {
         int256 x;
         int256 y;
@@ -14,15 +14,21 @@ abstract contract Blob {
     using LibString for int256;
     using Trigonometry for uint256;
 
-    function calculatePointY(uint256 outerRad) internal view virtual returns (uint256);
-
-    function createPoints(uint256 size, uint256 minGrowth, uint256 edgesNum) internal view returns (Point[] memory) {
+    function createPoints(
+        uint256 size,
+        uint256 x,
+        uint256 y,
+        uint256 minGrowth,
+        uint256 edgesNum
+    )
+        internal
+        view
+        returns (Point[] memory)
+    {
         Point[] memory points = new Point[](edgesNum);
 
         uint256 outerRad = size / 2;
         uint256 innerRad = minGrowth * (outerRad / 10);
-        uint256 x = 50;
-        uint256 y = calculatePointY(outerRad);
         uint256 deg = 360 / edgesNum;
 
         for (uint256 i = 0; i < edgesNum; i++) {

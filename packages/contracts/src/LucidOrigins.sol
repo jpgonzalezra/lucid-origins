@@ -191,8 +191,4 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
 
         return (colorDefs, fillColor);
     }
-
-    function calculatePointY(uint256 outerRad) internal view override(Body, Head) returns (uint256 y) {
-        // no-op
-    }
 }
