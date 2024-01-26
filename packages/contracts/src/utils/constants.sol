@@ -2,6 +2,9 @@
 pragma solidity 0.8.21;
 
 library Constants {
+    uint16 public constant X = 50;
+    uint16 public constant Y = 0;
+
     uint16 public constant BACKGROUND_INDEX = 0;
 
     // FACE
@@ -13,18 +16,13 @@ library Constants {
     uint16 public constant MOUNTH_ROTATION = 6;
 
     //HEAD
-    uint16 public constant HEAD_SIZE_INDEX = 7;
-    uint16 public constant HEAD_MIN_GROWTH_INDEX = 8;
-    uint16 public constant HEAD_EDGES_NUM_INDEX = 9;
-
-    uint16 public constant R_INDEX = 10;
-    uint16 public constant G_INDEX = 11;
-    uint16 public constant B_INDEX = 12;
-
-    uint16 public constant R2_INDEX = 13;
-    uint16 public constant G2_INDEX = 14;
-    uint16 public constant B2_INDEX = 15;
+    uint16 public constant SIZE_INDEX = 7;
+    uint16 public constant MIN_GROWTH_INDEX = 8;
+    uint16 public constant EDGES_NUM_INDEX = 9;
 
     uint16 public constant BASE_INDEX = 16;
     uint16 public constant CHAR_ROTATION_INDEX = 17;
+
+    uint16 public constant COLOR1_INDEX = 18;
+    uint16 public constant COLOR2_INDEX = 19;
 }

@@ -12,6 +12,7 @@ contract Blob {
     }
 
     using LibString for int256;
+    using LibString for uint256;
     using Trigonometry for uint256;
 
     function createPoints(
@@ -98,7 +99,7 @@ contract Blob {
     }
 
     function build(
-        string memory id,
+        uint256 id,
         string memory colorDefs,
         string memory fillColor,
         string memory h1,
@@ -112,7 +113,7 @@ contract Blob {
             abi.encodePacked(
                 colorDefs,
                 '<path id="',
-                id,
+                id.toString(),
                 '" d="',
                 h1,
                 'Z" stroke-width="2" stroke="black" transform-origin="center" fill="',
@@ -124,7 +125,9 @@ contract Blob {
                 h2,
                 ";",
                 h1,
-                '" dur="30s" id="body-anim" repeatCount="indefinite"',
+                '" dur="30s" id="',
+                id.toString(),
+                '-anim" repeatCount="indefinite"',
                 ' keysplines=".42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;',
                 ' .42 0 1 1; 0 0 .59 1; .42 0 1 1; 0 0 .59 1;"/>',
                 '<animateTransform attributeName="transform" type="rotate" ',

@@ -7,15 +7,88 @@ import { Owned } from "solmate/auth/Owned.sol";
 import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
 import { Face } from "./layers/Face.sol";
-import { Body } from "./layers/Body.sol";
-import { Head } from "./layers/Head.sol";
 import { Blush } from "./layers/Blush.sol";
+import { Blob } from "./layers/Blob.sol";
 import { LibString } from "solmate/utils/LibString.sol";
 import { Constants } from "./utils/constants.sol";
 
-contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
+contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush {
     using Encoder for string;
     using LibString for uint256;
+
+    string[71] internal colors = [
+        "#FEFEFE",
+        "#EFE3D8",
+        "#7E6966",
+        "#000000",
+        "#2B3C3D",
+        "#A5B5C6",
+        "#5D6224",
+        "#BF8B3B",
+        "#5C7E92",
+        "#81A79A",
+        "#1E2113",
+        "#9E4F42",
+        "#DEC209",
+        "#F8E6CD",
+        "#E29F0C",
+        "#F5DBAE",
+        "#EBF8FE",
+        "#C34229",
+        "#3767B5",
+        "#DCD996",
+        "#829F6C",
+        "#A49165",
+        "#9B5349",
+        "#F8E6CE",
+        "#2B3E44",
+        "#CDBDA2",
+        "#9C7959",
+        "#131B2B",
+        "#F7F5EB",
+        "#96661C",
+        "#881B17",
+        "#CAC77A",
+        "#5C5254",
+        "#D7B468",
+        "#335C9B",
+        "#D7AAAC",
+        "#A5B19D",
+        "#B34534",
+        "#F8E4D0",
+        "#101517",
+        "#768691",
+        "#BD986A",
+        "#9F2E23",
+        "#EDD0AC",
+        "#696A67",
+        "#DFC39B",
+        "#796331",
+        "#A76131",
+        "#3A2C1A",
+        "#515036",
+        "#93947E",
+        "#31334D",
+        "#8C8C94",
+        "#AC4C41",
+        "#F4C033",
+        "#0B0607",
+        "#5D798F",
+        "#C8867E",
+        "#DC7313",
+        "#C17A7C",
+        "#9AA9B5",
+        "#4C7C8E",
+        "#4F6B1D",
+        "#7AA2BA",
+        "#E6A826",
+        "#0C0805",
+        "#E4E7B5",
+        "#AE5935",
+        "#B9C07D",
+        "#DA7316",
+        "#C4441F"
+    ];
 
     constructor() Owned(msg.sender) ERC721A("LucidOrigins", "LucidOrigins") { }
 
@@ -23,60 +96,43 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
         uint16[] memory dna = getDna(uint256(keccak256(abi.encodePacked(tokenId))));
 
         string memory name = string(abi.encodePacked("LucidOrigins #", tokenId.toString()));
-        string memory header = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">';
-
-        uint256 r = normalizeToRange(dna[Constants.R_INDEX], 1, 255);
-        uint256 g = normalizeToRange(dna[Constants.G_INDEX], 1, 255);
-        uint256 b = normalizeToRange(dna[Constants.B_INDEX], 1, 255);
-
-        uint256 r2 = normalizeToRange(dna[Constants.R2_INDEX], 1, 255);
-        uint256 g2 = normalizeToRange(dna[Constants.G2_INDEX], 1, 255);
-        uint256 b2 = normalizeToRange(dna[Constants.B2_INDEX], 1, 255);
-
         string memory background = background(normalizeToRange(dna[Constants.BACKGROUND_INDEX], 0, 16));
 
-        string memory linesColor = isColorDark(r, g, b) ? "#FFF" : "#000";
-
+        string memory layers = "";
+        uint256 size = normalizeToRange(dna[Constants.SIZE_INDEX], 125, 135);
+        for (uint256 i = 1; i <= 3; i++) {
+            (string memory colorDefs, string memory fillColor) = resolveDefsAndFillColor(
+                normalizeToRange(dna[Constants.COLOR1_INDEX] * i, 0, 71),
+                normalizeToRange(dna[Constants.COLOR2_INDEX] * i, 0, 71),
+                normalizeToRange(dna[Constants.BASE_INDEX] * i, 0, 100)
+            );
+            uint256 minGrowth = normalizeToRange(dna[Constants.MIN_GROWTH_INDEX] * i, 6, 9);
+            uint256 edgesNum = normalizeToRange(dna[Constants.EDGES_NUM_INDEX] * i, 10, 15);
+            string memory path1 = createSvgPath(createPoints(size, 50, 0, minGrowth, edgesNum));
+            string memory path2 = createSvgPath(createPoints(size + 1, 50, 0, minGrowth, edgesNum));
+            layers = string(abi.encodePacked(layers, build(i, colorDefs, fillColor, path1, path2)));
+            unchecked {
+                size = size - 30;
+            }
+        }
         string memory face = face(
             normalizeToRange(dna[Constants.EYE_RADIUS_INDEX], 7, 7),
             normalizeToRange(dna[Constants.EYE_BROW_LENGHT_INDEX], 2, 4),
             normalizeToRange(dna[Constants.EYE_SEPARATION_INDEX], 20, 25),
             normalizeToRange(dna[Constants.EYE_BROW_ROTATION_INDEX], 0, 20),
             normalizeToRange(dna[Constants.MOUNTH_ROTATION], 0, 6),
-            normalizeToRange(dna[Constants.EYE_BROW_SIZE_INDEX], 1, 5),
-            linesColor,
-            r2,
-            g2,
-            b2
+            normalizeToRange(dna[Constants.EYE_BROW_SIZE_INDEX], 1, 5)
         );
-
-        (string memory colorDefs, string memory fillColor) =
-            getColor(r, g, b, r2, g2, b2, normalizeToRange(dna[Constants.BASE_INDEX], 0, 100));
-
-        string memory head = head(
-            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 60, 78),
-            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 1, 3),
-            normalizeToRange(dna[Constants.HEAD_MIN_GROWTH_INDEX], 6, 9),
-            normalizeToRange(dna[Constants.HEAD_EDGES_NUM_INDEX], 5, 15),
-            colorDefs,
-            fillColor
+        string memory svgContent = string(abi.encodePacked(layers, face, blush()));
+        uint256 rotation = normalizeToRange(dna[Constants.SIZE_INDEX], 0, 3);
+        string memory svg = string(
+            abi.encodePacked(
+                '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">',
+                background,
+                rotationWrapper(rotation, svgContent),
+                "</svg>"
+            )
         );
-
-        string memory body = body(
-            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 95, 125),
-            normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 1, 3),
-            normalizeToRange(dna[Constants.HEAD_MIN_GROWTH_INDEX], 9, 12),
-            normalizeToRange(dna[Constants.HEAD_EDGES_NUM_INDEX], 10, 55),
-            colorDefs,
-            fillColor
-        );
-
-        string memory footer = "</svg>";
-
-        string memory svgContent = string(abi.encodePacked(body, head, face, blush()));
-
-        uint256 rotation = normalizeToRange(dna[Constants.HEAD_SIZE_INDEX], 0, 3);
-        string memory svg = string(abi.encodePacked(header, background, rotationWrapper(rotation, svgContent), footer));
 
         return metadata(name, svg);
     }
@@ -144,17 +200,13 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
         return (2126 * r + 7152 * g + 722 * b) / 10_000 < 128;
     }
 
-    function getColor(
-        uint256 r,
-        uint256 g,
-        uint256 b,
-        uint256 r2,
-        uint256 g2,
-        uint256 b2,
+    function resolveDefsAndFillColor(
+        uint256 color1,
+        uint256 color2,
         uint256 base
     )
         internal
-        pure
+        view
         returns (string memory, string memory)
     {
         bool isPlain = base < 80;
@@ -165,29 +217,19 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Body, Head, Blush {
                     "<defs>",
                     '<linearGradient id="linear-grad">',
                     '<stop offset="0" stop-color="',
-                    "rgb(",
-                    r.toString(),
-                    ",",
-                    g.toString(),
-                    ",",
-                    b.toString(),
-                    ')"/>',
+                    '"',
+                    colors[color1],
+                    '"/>',
                     '<stop offset="1" stop-color="',
-                    "rgb(",
-                    r2.toString(),
-                    ",",
-                    g2.toString(),
-                    ",",
-                    b2.toString(),
-                    ')"/>',
+                    '"',
+                    colors[color2],
+                    '"/>',
                     "</linearGradient>",
                     "</defs>"
                 )
             );
 
-        string memory fillColor = isPlain
-            ? string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(), ",", b.toString(), ")"))
-            : "url(#linear-grad)";
+        string memory fillColor = isPlain ? colors[color1] : "url(#linear-grad)";
 
         return (colorDefs, fillColor);
     }
