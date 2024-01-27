@@ -9,39 +9,28 @@ contract Face {
 
     function face(
         uint256 eyeRadius,
-        uint256 eyebrowLength,
         uint256 eyeSeparation,
-        uint256 eyebrowRotation,
-        uint256 mouthRotation,
-        uint256 eyebrowSize
+        uint256 pupilRadius,
+        string memory pupilColor
     )
         internal
         pure
         returns (string memory)
     {
-        string memory eyes = getEyes(eyeRadius, eyeSeparation, mouthRotation, eyebrowRotation);
-        //string memory eyebrows = getEyebrows(eyebrowLength, eyebrowRotation, eyebrowSize, mouthRotation, linesColor);
-        //string memory mouth = getMouth(eyeSeparation, eyebrowRotation, eyebrowSize, mouthRotation, linesColor);
-
-        return string(
-            // abi.encodePacked('<g id="face" transform="scale(0.6) translate(30 30)">', eyes, eyebrows, mouth, "</g>")
-            abi.encodePacked('<g id="face" >', eyes, /*eyebrows, mouth,*/ "</g>")
-        );
+        string memory eyes = getEyes(eyeRadius, eyeSeparation, pupilRadius, pupilColor);
+        return string(abi.encodePacked('<g id="face" >', eyes, "</g>"));
     }
 
     function getEyes(
         uint256 eyeRadius,
         uint256 eyeSeparation,
         uint256 pupilRadius,
-        uint256 pupilColor
+        string memory pupilColor
     )
         internal
         pure
         returns (string memory)
     {
-        // string memory pupilAlternativegitColor = string(abi.encodePacked("rgb(", r.toString(), ",", g.toString(),
-        // ",",
-        // b.toString(), ")"));
         return string(
             abi.encodePacked(
                 '<g id="face">',
@@ -53,9 +42,9 @@ contract Face {
                 '<circle cx="',
                 (50 - eyeSeparation / 2).toString(),
                 '" cy="40" r="',
-                (pupilRadius < 3 ? 0 : pupilRadius).toString(),
+                pupilRadius.toString(),
                 '" fill="',
-                pupilColor > 15 ? string(abi.encodePacked("#FFF")) : "black",
+                string(abi.encodePacked(pupilColor)),
                 '"/>' '<circle cx="',
                 (50 + eyeSeparation / 2).toString(),
                 '" cy="40" r="',
@@ -64,9 +53,9 @@ contract Face {
                 '<circle cx="',
                 (50 + eyeSeparation / 2).toString(),
                 '" cy="40" r="',
-                (pupilRadius < 3 ? 0 : pupilRadius).toString(),
+                pupilRadius.toString(),
                 '" fill="',
-                pupilColor > 15 ? string(abi.encodePacked("#FFF")) : "black",
+                string(abi.encodePacked(pupilColor)),
                 '"/>' "</g>"
             )
         );

@@ -11,97 +11,25 @@ import { Blush } from "./layers/Blush.sol";
 import { Blob } from "./layers/Blob.sol";
 import { LibString } from "solmate/utils/LibString.sol";
 import { Constants } from "./utils/constants.sol";
+import { Colors } from "./utils/Colors.sol";
 
-contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush {
+contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
     using Encoder for string;
     using LibString for uint256;
-
-    string[71] internal colors = [
-        "#FEFEFE",
-        "#EFE3D8",
-        "#7E6966",
-        "#000000",
-        "#2B3C3D",
-        "#A5B5C6",
-        "#5D6224",
-        "#BF8B3B",
-        "#5C7E92",
-        "#81A79A",
-        "#1E2113",
-        "#9E4F42",
-        "#DEC209",
-        "#F8E6CD",
-        "#E29F0C",
-        "#F5DBAE",
-        "#EBF8FE",
-        "#C34229",
-        "#3767B5",
-        "#DCD996",
-        "#829F6C",
-        "#A49165",
-        "#9B5349",
-        "#F8E6CE",
-        "#2B3E44",
-        "#CDBDA2",
-        "#9C7959",
-        "#131B2B",
-        "#F7F5EB",
-        "#96661C",
-        "#881B17",
-        "#CAC77A",
-        "#5C5254",
-        "#D7B468",
-        "#335C9B",
-        "#D7AAAC",
-        "#A5B19D",
-        "#B34534",
-        "#F8E4D0",
-        "#101517",
-        "#768691",
-        "#BD986A",
-        "#9F2E23",
-        "#EDD0AC",
-        "#696A67",
-        "#DFC39B",
-        "#796331",
-        "#A76131",
-        "#3A2C1A",
-        "#515036",
-        "#93947E",
-        "#31334D",
-        "#8C8C94",
-        "#AC4C41",
-        "#F4C033",
-        "#0B0607",
-        "#5D798F",
-        "#C8867E",
-        "#DC7313",
-        "#C17A7C",
-        "#9AA9B5",
-        "#4C7C8E",
-        "#4F6B1D",
-        "#7AA2BA",
-        "#E6A826",
-        "#0C0805",
-        "#E4E7B5",
-        "#AE5935",
-        "#B9C07D",
-        "#DA7316",
-        "#C4441F"
-    ];
 
     constructor() Owned(msg.sender) ERC721A("LucidOrigins", "LucidOrigins") { }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         uint16[] memory dna = getDna(uint256(keccak256(abi.encodePacked(tokenId))));
-
         string memory name = string(abi.encodePacked("LucidOrigins #", tokenId.toString()));
         string memory background = background(normalizeToRange(dna[Constants.BACKGROUND_INDEX], 0, 16));
 
         string memory layers = "";
         uint256 size = normalizeToRange(dna[Constants.SIZE_INDEX], 125, 135);
+        string memory colorDefs;
+        string memory fillColor;
         for (uint256 i = 1; i <= 3; i++) {
-            (string memory colorDefs, string memory fillColor) = resolveDefsAndFillColor(
+            (colorDefs, fillColor) = resolveDefsAndFillColor(
                 normalizeToRange(dna[Constants.COLOR1_INDEX] * i, 0, 71),
                 normalizeToRange(dna[Constants.COLOR2_INDEX] * i, 0, 71),
                 normalizeToRange(dna[Constants.BASE_INDEX] * i, 0, 100)
@@ -117,11 +45,9 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush {
         }
         string memory face = face(
             normalizeToRange(dna[Constants.EYE_RADIUS_INDEX], 7, 7),
-            normalizeToRange(dna[Constants.EYE_BROW_LENGHT_INDEX], 2, 4),
             normalizeToRange(dna[Constants.EYE_SEPARATION_INDEX], 20, 25),
-            normalizeToRange(dna[Constants.EYE_BROW_ROTATION_INDEX], 0, 20),
-            normalizeToRange(dna[Constants.MOUNTH_ROTATION], 0, 6),
-            normalizeToRange(dna[Constants.EYE_BROW_SIZE_INDEX], 1, 5)
+            normalizeToRange(dna[Constants.EYE_PUPIL_RADIUS_INDEX], 0, 6),
+            fillColor
         );
         string memory svgContent = string(abi.encodePacked(layers, face, blush()));
         uint256 rotation = normalizeToRange(dna[Constants.SIZE_INDEX], 0, 3);
@@ -134,6 +60,7 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush {
             )
         );
 
+        console2.log(svg);
         return metadata(name, svg);
     }
 
@@ -217,11 +144,9 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush {
                     "<defs>",
                     '<linearGradient id="linear-grad">',
                     '<stop offset="0" stop-color="',
-                    '"',
                     colors[color1],
                     '"/>',
                     '<stop offset="1" stop-color="',
-                    '"',
                     colors[color2],
                     '"/>',
                     "</linearGradient>",

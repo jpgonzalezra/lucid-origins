@@ -9,11 +9,8 @@ library Constants {
 
     // FACE
     uint16 public constant EYE_RADIUS_INDEX = 1;
-    uint16 public constant EYE_BROW_LENGHT_INDEX = 2;
     uint16 public constant EYE_SEPARATION_INDEX = 3;
-    uint16 public constant EYE_BROW_ROTATION_INDEX = 4;
-    uint16 public constant EYE_BROW_SIZE_INDEX = 5;
-    uint16 public constant MOUNTH_ROTATION = 6;
+    uint16 public constant EYE_PUPIL_RADIUS_INDEX = 6;
 
     //HEAD
     uint16 public constant SIZE_INDEX = 7;
