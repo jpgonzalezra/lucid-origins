@@ -60,7 +60,6 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             )
         );
 
-        // console2.log(svg);
         return metadata(name, svg);
     }
 

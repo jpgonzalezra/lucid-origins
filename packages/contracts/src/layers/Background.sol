@@ -1,35 +1,102 @@
 // SPDX-License-Identifier: GNU GPLv3
 pragma solidity 0.8.23;
 
-// import { console2 } from "forge-std/console2.sol";
+import { console2 } from "forge-std/console2.sol";
+import { LibString } from "solmate/utils/LibString.sol";
 
 contract Background {
+    using LibString for int256;
+
     string[20] internal bgColors = [
-        "#FAF4EF",
-        "#EFFAEF",
-        "#EFF4FA",
-        "#FAEFFA",
-        "#EFF4FA",
-        "#F4EFFA",
-        "#FAFAEF",
-        "#FAEFF4",
-        "#EFFAFA",
-        "#EFF7EB",
-        "#DBDBDB",
-        "#EDF1F7",
-        "#EFF7EB",
-        "#F7F7E9",
-        "#EFEFEF",
-        "#F0E6E6",
-        "#E6F0EE",
-        "#F0E6F0",
-        "#E6E6F0",
-        "#F0EEDB"
+        "#F8F8F8",
+        "#F0F0F0",
+        "#E8E8E8",
+        "#E0E0E0",
+        "#D8D8D8",
+        "#D0D0D0",
+        "#C8C8C8",
+        "#C0C0C0",
+        "#B8B8B8",
+        "#B0B0B0",
+        "#A8A8A8",
+        "#A0A0A0",
+        "#989898",
+        "#909090",
+        "#888888",
+        "#808080",
+        "#787878",
+        "#707070",
+        "#686868",
+        "#606060"
     ];
 
+    function generatePath(int256 curveVal, int256 pos, int256 index) internal pure returns (string memory) {
+        int256 cVal = curveVal % 100;
+        int256 bigC = 100 - cVal;
+
+        return string(
+            abi.encodePacked(
+                "m 50 ",
+                ((50 + pos + 50 * index) % 100).toString(),
+                " Q ",
+                bigC.toString(),
+                " ",
+                cVal.toString(),
+                " ",
+                ((100 - pos - 50 * index) % 100).toString(),
+                " 50 Q ",
+                bigC.toString(),
+                " ",
+                bigC.toString(),
+                " 50 ",
+                ((100 - pos - 50 * index) % 100).toString(),
+                " Q ",
+                cVal.toString(),
+                " ",
+                bigC.toString(),
+                " ",
+                ((50 + pos + 50 * index) % 100).toString(),
+                " 50 Q ",
+                cVal.toString(),
+                " ",
+                cVal.toString(),
+                " 50 ",
+                ((50 + pos + 50 * index) % 100).toString(),
+                " z"
+            )
+        );
+    }
+
+    function hydrateBlog(string[3] memory paths, string[3] memory colors) internal pure returns (string memory) {
+        return string(
+            abi.encodePacked(
+                '<path d="',
+                paths[0],
+                '" fill="rgb(',
+                colors[1],
+                ')" /><path d="',
+                paths[1],
+                '" fill="rgb(',
+                colors[2],
+                ')" /><path d="',
+                paths[2],
+                '" fill="rgb(',
+                colors[0],
+                ')" />'
+            )
+        );
+    }
+
     function background(uint256 dnaBgLayer) internal view returns (string memory) {
-        return
-                
-            string(abi.encodePacked('<defs><pattern id="star" fill="', bgColors[dnaBgLayer], '" viewBox="0,0,10,10" width="10%" height="10%"><polygon points="0,0 2,5 0,10 5,8 10,10 8,5 10,0 5,2" /></pattern></defs>','<rect x="0" y="0" width="100" height="100" fill="url(#star)"/>'));
+        string[3] memory paths = [
+            generatePath(int256(dnaBgLayer * 10), 30, 0),
+            generatePath(int256(dnaBgLayer * 20), 40, 1),
+            generatePath(int256(dnaBgLayer * 30), 20, 2)
+        ];
+
+        string memory elColor = bgColors[dnaBgLayer * 10 % 20];
+        string[3] memory colors = [elColor, bgColors[dnaBgLayer % 20], bgColors[dnaBgLayer * 30 % 20]];
+        // console2.log(hydrateBlog(paths, colors));
+        return hydrateBlog(paths, colors);
     }
 }
