@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GNU GPLv3
-pragma solidity 0.8.21;
+pragma solidity 0.8.23;
 
 import { ERC721A } from "ERC721A/ERC721A.sol";
 import { Encoder } from "./Encoder.sol";
 import { Owned } from "solmate/auth/Owned.sol";
-import { console2 } from "forge-std/console2.sol";
+// import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
 import { Face } from "./layers/Face.sol";
 import { Blush } from "./layers/Blush.sol";
@@ -60,7 +60,7 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             )
         );
 
-        console2.log(svg);
+        // console2.log(svg);
         return metadata(name, svg);
     }
 

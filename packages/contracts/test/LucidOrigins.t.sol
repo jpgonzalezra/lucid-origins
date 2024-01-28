@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.21;
+pragma solidity 0.8.23;
 
 import { PRBTest } from "@prb/test/PRBTest.sol";
-import { console2 } from "forge-std/console2.sol";
+// import { console2 } from "forge-std/console2.sol";
 import { StdCheats } from "forge-std/StdCheats.sol";
 
 import { LucidOrigins } from "../src/LucidOrigins.sol";
@@ -21,7 +21,7 @@ contract LucidOriginsTest is PRBTest, StdCheats {
     }
 
     /// @dev Basic test. Run it with `forge test -vvv` to see the console log.
-    function test_Example() external {
+    function test_Example() view external {
         lucidOrigins.tokenURI(234);
     }
 }

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.8.21 <0.9.0;
+pragma solidity 0.8.23;
 
 import { LucidOrigins } from "../src/LucidOrigins.sol";
 import { BaseScript } from "./Base.s.sol";
