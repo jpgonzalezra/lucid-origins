@@ -18,7 +18,7 @@ contract Face {
         returns (string memory)
     {
         string memory eyes = getEyes(eyeRadius, eyeSeparation, pupilRadius, pupilColor);
-        return string(abi.encodePacked('<g id="face" >', eyes, "</g>"));
+        return string.concat('<g id="face" >', eyes, "</g>");
     }
 
     function getEyes(
@@ -31,33 +31,31 @@ contract Face {
         pure
         returns (string memory)
     {
-        return string(
-            abi.encodePacked(
-                '<g id="face">',
-                '<circle cx="',
-                (50 - eyeSeparation / 2).toString(),
-                '" cy="40" r="',
-                eyeRadius.toString(),
-                '" fill="white"/>',
-                '<circle cx="',
-                (50 - eyeSeparation / 2).toString(),
-                '" cy="40" r="',
-                pupilRadius.toString(),
-                '" fill="',
-                string(abi.encodePacked(pupilColor)),
-                '"/>' '<circle cx="',
-                (50 + eyeSeparation / 2).toString(),
-                '" cy="40" r="',
-                eyeRadius.toString(),
-                '" fill="white"/>',
-                '<circle cx="',
-                (50 + eyeSeparation / 2).toString(),
-                '" cy="40" r="',
-                pupilRadius.toString(),
-                '" fill="',
-                string(abi.encodePacked(pupilColor)),
-                '"/>' "</g>"
-            )
+        return string.concat(
+            '<g id="face">',
+            '<circle cx="',
+            (50 - eyeSeparation / 2).toString(),
+            '" cy="40" r="',
+            eyeRadius.toString(),
+            '" fill="white"/>',
+            '<circle cx="',
+            (50 - eyeSeparation / 2).toString(),
+            '" cy="40" r="',
+            pupilRadius.toString(),
+            '" fill="',
+            pupilColor,
+            '"/>' '<circle cx="',
+            (50 + eyeSeparation / 2).toString(),
+            '" cy="40" r="',
+            eyeRadius.toString(),
+            '" fill="white"/>',
+            '<circle cx="',
+            (50 + eyeSeparation / 2).toString(),
+            '" cy="40" r="',
+            pupilRadius.toString(),
+            '" fill="',
+            pupilColor,
+            '"/>' "</g>"
         );
     }
 
@@ -71,33 +69,31 @@ contract Face {
         pure
         returns (string memory)
     {
-        return string(
-            abi.encodePacked(
-                '<g id="eyes">',
-                '<circle cx="',
-                (50 - eyeSeparation / 2).toString(),
-                '" cy="40" r="',
-                eyeRadius.toString(),
-                '" fill="',
-                linesColor,
-                '" transform="rotate(',
-                eyebrowRotation.toString(),
-                " ",
-                (50 - eyeSeparation / 2).toString(),
-                ' 40)"/>',
-                '<circle cx="',
-                (50 + eyeSeparation / 2).toString(),
-                '" cy="40" r="',
-                eyeRadius.toString(),
-                '" fill="',
-                linesColor,
-                '" transform="rotate(',
-                eyebrowRotation.toString(),
-                " ",
-                (50 + eyeSeparation / 2).toString(),
-                ' 40)"/>',
-                "</g>"
-            )
+        return string.concat(
+            '<g id="eyes">',
+            '<circle cx="',
+            (50 - eyeSeparation / 2).toString(),
+            '" cy="40" r="',
+            eyeRadius.toString(),
+            '" fill="',
+            linesColor,
+            '" transform="rotate(',
+            eyebrowRotation.toString(),
+            " ",
+            (50 - eyeSeparation / 2).toString(),
+            ' 40)"/>',
+            '<circle cx="',
+            (50 + eyeSeparation / 2).toString(),
+            '" cy="40" r="',
+            eyeRadius.toString(),
+            '" fill="',
+            linesColor,
+            '" transform="rotate(',
+            eyebrowRotation.toString(),
+            " ",
+            (50 + eyeSeparation / 2).toString(),
+            ' 40)"/>',
+            "</g>"
         );
     }
 
@@ -114,45 +110,43 @@ contract Face {
     {
         uint256 leftEyebrowScale = eyebrowRotation > 10 ? 0 : 1;
         uint256 rightEyebrowScale = mouthRotation > 3 ? 0 : 1;
-        return string(
-            abi.encodePacked(
-                '<g id="eyebrows">',
-                '<line x1="',
-                (35 - eyebrowSize).toString(),
-                '" y1="',
-                (30 - eyebrowLength).toString(),
-                '" x2="',
-                (45 + eyebrowSize).toString(),
-                '" y2="',
-                (30 - eyebrowLength).toString(),
-                '" stroke="',
-                linesColor,
-                '" stroke-width="2" stroke-linecap="round" transform="rotate(',
-                eyebrowRotation.toString(),
-                " 35 ",
-                (30 - eyebrowLength).toString(),
-                ") scale(",
-                leftEyebrowScale.toString(),
-                ')"/>',
-                '<line x1="',
-                (60 - eyebrowSize).toString(),
-                '" y1="',
-                (30 - eyebrowLength).toString(),
-                '" x2="',
-                (65 + eyebrowSize).toString(),
-                '" y2="',
-                (30 - eyebrowLength).toString(),
-                '" stroke="',
-                linesColor,
-                '" stroke-width="2" stroke-linecap="round" transform="rotate(',
-                eyebrowRotation.toString(),
-                " 65 ",
-                (30 - eyebrowLength).toString(),
-                ") scale(",
-                rightEyebrowScale.toString(),
-                ')"/>',
-                "</g>"
-            )
+        return string.concat(
+            '<g id="eyebrows">',
+            '<line x1="',
+            (35 - eyebrowSize).toString(),
+            '" y1="',
+            (30 - eyebrowLength).toString(),
+            '" x2="',
+            (45 + eyebrowSize).toString(),
+            '" y2="',
+            (30 - eyebrowLength).toString(),
+            '" stroke="',
+            linesColor,
+            '" stroke-width="2" stroke-linecap="round" transform="rotate(',
+            eyebrowRotation.toString(),
+            " 35 ",
+            (30 - eyebrowLength).toString(),
+            ") scale(",
+            leftEyebrowScale.toString(),
+            ')"/>',
+            '<line x1="',
+            (60 - eyebrowSize).toString(),
+            '" y1="',
+            (30 - eyebrowLength).toString(),
+            '" x2="',
+            (65 + eyebrowSize).toString(),
+            '" y2="',
+            (30 - eyebrowLength).toString(),
+            '" stroke="',
+            linesColor,
+            '" stroke-width="2" stroke-linecap="round" transform="rotate(',
+            eyebrowRotation.toString(),
+            " 65 ",
+            (30 - eyebrowLength).toString(),
+            ") scale(",
+            rightEyebrowScale.toString(),
+            ')"/>',
+            "</g>"
         );
     }
 
@@ -177,30 +171,28 @@ contract Face {
         uint256 y2 = eyeSeparation > 25 ? 50 + size : 50 - size;
         uint256 y3 = 50 + controlY;
 
-        return string(
-            abi.encodePacked(
-                '<g id="mouth">',
-                '<path d="M',
-                x1.toString(),
-                " ",
-                y1.toString(),
-                " Q",
-                x2.toString(),
-                " ",
-                y2.toString(),
-                " ",
-                x3.toString(),
-                " ",
-                y3.toString(),
-                '" stroke="',
-                linesColor,
-                '" stroke-width="2" fill="transparent" stroke-linecap="round" transform="rotate(',
-                mouthRotation.toString(),
-                " 50 ",
-                (50 + controlY).toString(),
-                ')"/>',
-                "</g>"
-            )
+        return string.concat(
+            '<g id="mouth">',
+            '<path d="M',
+            x1.toString(),
+            " ",
+            y1.toString(),
+            " Q",
+            x2.toString(),
+            " ",
+            y2.toString(),
+            " ",
+            x3.toString(),
+            " ",
+            y3.toString(),
+            '" stroke="',
+            linesColor,
+            '" stroke-width="2" fill="transparent" stroke-linecap="round" transform="rotate(',
+            mouthRotation.toString(),
+            " 50 ",
+            (50 + controlY).toString(),
+            ')"/>',
+            "</g>"
         );
     }
 }

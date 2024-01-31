@@ -21,7 +21,7 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         uint16[] memory dna = getDna(uint256(keccak256(abi.encodePacked(tokenId))));
-        string memory name = string(abi.encodePacked("LucidOrigins #", tokenId.toString()));
+        string memory name = string.concat("LucidOrigins #", tokenId.toString());
         string memory background = background(normalizeToRange(dna[Constants.BACKGROUND_INDEX], 0, 16));
 
         string memory layers = "";
@@ -38,7 +38,7 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             uint256 edgesNum = normalizeToRange(dna[Constants.EDGES_NUM_INDEX] * i, 10, 15);
             string memory path1 = createSvgPath(createPoints(size, 50, 0, minGrowth, edgesNum));
             string memory path2 = createSvgPath(createPoints(size + 1, 50, 0, minGrowth, edgesNum));
-            layers = string(abi.encodePacked(layers, build(i, colorDefs, fillColor, path1, path2)));
+            layers = string.concat(layers, build(i, colorDefs, fillColor, path1, path2));
             unchecked {
                 size = size - 30;
             }
@@ -49,44 +49,37 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             normalizeToRange(dna[Constants.EYE_PUPIL_RADIUS_INDEX], 0, 6),
             fillColor
         );
-        string memory svgContent = string(abi.encodePacked(layers, face, blush()));
+        string memory svgContent = string.concat(layers, face, blush());
         uint256 rotation = normalizeToRange(dna[Constants.SIZE_INDEX], 0, 3);
-        string memory svg = string(
-            abi.encodePacked(
-                '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">',
-                background,
-                rotationWrapper(rotation, svgContent),
-                "</svg>"
-            )
+        string memory svg = string.concat(
+            '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">',
+            background,
+            rotationWrapper(rotation, svgContent),
+            "</svg>"
         );
 
-        // console2.log(svg);
         return metadata(name, svg);
     }
 
     function rotationWrapper(uint256 rotation, string memory content) internal pure returns (string memory) {
         string memory rotationDegree = rotation == 0 ? "0" : rotation == 1 ? "90" : rotation == 2 ? "180" : "-90";
-        return string(
-            abi.encodePacked(
-                '<g transform="scale(0.99) rotate(', rotationDegree, ", 50, 50) translate(0 0)\">", content, "</g>"
-            )
+        return string.concat(
+            '<g transform="scale(0.99) rotate(', rotationDegree, ", 50, 50) translate(0 0)\">", content, "</g>"
         );
     }
 
     function metadata(string memory name, string memory svg) internal pure returns (string memory) {
         string memory description = "LucidOrigins, fully on-chain NFT";
-        string memory json = string(
-            abi.encodePacked(
-                '{"name":"',
-                name,
-                '","description":"',
-                description,
-                '","image": "data:image/svg+xml;base64,',
-                Encoder.base64(bytes(svg)),
-                '"}'
-            )
+        string memory json = string.concat(
+            '{"name":"',
+            name,
+            '","description":"',
+            description,
+            '","image": "data:image/svg+xml;base64,',
+            Encoder.base64(bytes(svg)),
+            '"}'
         );
-        return string(abi.encodePacked("data:application/json;base64,", Encoder.base64(bytes(json))));
+        return string.concat("data:application/json;base64,", Encoder.base64(bytes(json)));
     }
 
     function getDna(uint256 preDna) internal pure returns (uint16[] memory) {
@@ -139,19 +132,17 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
         bool isPlain = base < 80;
         string memory colorDefs = isPlain
             ? ""
-            : string(
-                abi.encodePacked(
-                    "<defs>",
-                    '<linearGradient id="linear-grad">',
-                    '<stop offset="0" stop-color="',
-                    colors[color1],
-                    '"/>',
-                    '<stop offset="1" stop-color="',
-                    colors[color2],
-                    '"/>',
-                    "</linearGradient>",
-                    "</defs>"
-                )
+            : string.concat(
+                "<defs>",
+                '<linearGradient id="linear-grad">',
+                '<stop offset="0" stop-color="',
+                colors[color1],
+                '"/>',
+                '<stop offset="1" stop-color="',
+                colors[color2],
+                '"/>',
+                "</linearGradient>",
+                "</defs>"
             );
 
         string memory fillColor = isPlain ? colors[color1] : "url(#linear-grad)";
