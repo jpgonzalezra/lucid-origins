@@ -34,69 +34,63 @@ contract Background {
         int256 cVal = curveVal % 100;
         int256 bigC = 100 - cVal;
 
-        return string(
-            abi.encodePacked(
-                "m 50 ",
-                ((50 + pos + 50 * index) % 100).toString(),
-                " Q ",
-                bigC.toString(),
-                " ",
-                cVal.toString(),
-                " ",
-                ((100 - pos - 50 * index) % 100).toString(),
-                " 50 Q ",
-                bigC.toString(),
-                " ",
-                bigC.toString(),
-                " 50 ",
-                ((100 - pos - 50 * index) % 100).toString(),
-                " Q ",
-                cVal.toString(),
-                " ",
-                bigC.toString(),
-                " ",
-                ((50 + pos + 50 * index) % 100).toString(),
-                " 50 Q ",
-                cVal.toString(),
-                " ",
-                cVal.toString(),
-                " 50 ",
-                ((50 + pos + 50 * index) % 100).toString(),
-                " z"
-            )
+        int256 part1x = 33 + pos + 66 * index;
+        int256 part3x = 66 - pos - 66 * index;
+        int256 part5x = 33 + pos + 66 * index;
+
+        return string.concat(
+            "m 50 ",
+            part1x.toString(),
+            " Q ",
+            bigC.toString(),
+            " ",
+            cVal.toString(),
+            " ",
+            part3x.toString(),
+            " 50 Q ",
+            bigC.toString(),
+            " ",
+            bigC.toString(),
+            " 50 ",
+            part3x.toString(),
+            " Q ",
+            cVal.toString(),
+            " ",
+            bigC.toString(),
+            " ",
+            part5x.toString(),
+            " 50 Q ",
+            cVal.toString(),
+            " ",
+            cVal.toString(),
+            " 50 ",
+            part5x.toString(),
+            " z"
         );
     }
 
     function hydrateBlog(string[3] memory paths, string[3] memory colors) internal pure returns (string memory) {
-        return string(
-            abi.encodePacked(
-                '<path d="',
-                paths[0],
-                '" fill="rgb(',
-                colors[1],
-                ')" /><path d="',
-                paths[1],
-                '" fill="rgb(',
-                colors[2],
-                ')" /><path d="',
-                paths[2],
-                '" fill="rgb(',
-                colors[0],
-                ')" />'
-            )
+        return string.concat(
+            '<path d="',
+            paths[0],
+            '" fill="',
+            colors[1],
+            '" /><path d="',
+            paths[1],
+            '" fill="',
+            colors[2],
+            '" /><path d="',
+            paths[2],
+            '" fill="',
+            colors[0],
+            '" />'
         );
     }
 
     function background(uint256 dnaBgLayer) internal view returns (string memory) {
-        string[3] memory paths = [
-            generatePath(int256(dnaBgLayer * 10), 30, 0),
-            generatePath(int256(dnaBgLayer * 20), 40, 1),
-            generatePath(int256(dnaBgLayer * 30), 20, 2)
-        ];
-
-        string memory elColor = bgColors[dnaBgLayer * 10 % 20];
-        string[3] memory colors = [elColor, bgColors[dnaBgLayer % 20], bgColors[dnaBgLayer * 30 % 20]];
-        // console2.log(hydrateBlog(paths, colors));
+        string[3] memory paths = [generatePath(68, 23, 2), generatePath(11, 70, 1), generatePath(38, 67, 0)];
+        string[3] memory colors = ["#27b4f6", "#D84B09", "#F67094"];
+        console2.log(hydrateBlog(paths, colors));
         return hydrateBlog(paths, colors);
     }
 }
