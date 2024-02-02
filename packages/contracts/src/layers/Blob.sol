@@ -4,6 +4,7 @@ pragma solidity 0.8.23;
 // import { console2 } from "forge-std/console2.sol";
 import { LibString } from "solmate/utils/LibString.sol";
 import { Trigonometry } from "solidity-trigonometry/Trigonometry.sol";
+import { Constants } from "../utils/constants.sol";
 
 contract Blob {
     struct Point {
@@ -107,13 +108,16 @@ contract Blob {
         pure
         returns (string memory)
     {
+        uint256 strokeWidth = id == 1 ? 3 : 0;
         return string.concat(
             colorDefs,
             '<path id="',
             id.toString(),
             '" d="',
             h1,
-            'Z" stroke-width="2" stroke="black" transform-origin="center" fill="',
+            'Z" stroke-width="',
+            strokeWidth.toString(),
+            '" stroke="black" transform-origin="center" fill="',
             fillColor,
             '">',
             '<animate attributeName="d" values="',

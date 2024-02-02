@@ -1,34 +1,10 @@
 // SPDX-License-Identifier: GNU GPLv3
 pragma solidity 0.8.23;
 
-import { console2 } from "forge-std/console2.sol";
 import { LibString } from "solmate/utils/LibString.sol";
 
 contract Background {
     using LibString for int256;
-
-    string[20] internal bgColors = [
-        "#F8F8F8",
-        "#F0F0F0",
-        "#E8E8E8",
-        "#E0E0E0",
-        "#D8D8D8",
-        "#D0D0D0",
-        "#C8C8C8",
-        "#C0C0C0",
-        "#B8B8B8",
-        "#B0B0B0",
-        "#A8A8A8",
-        "#A0A0A0",
-        "#989898",
-        "#909090",
-        "#888888",
-        "#808080",
-        "#787878",
-        "#707070",
-        "#686868",
-        "#606060"
-    ];
 
     function generatePath(int256 curveVal, int256 pos, int256 index) internal pure returns (string memory) {
         int256 cVal = curveVal % 100;
@@ -69,28 +45,65 @@ contract Background {
         );
     }
 
-    function hydrateBlog(string[3] memory paths, string[3] memory colors) internal pure returns (string memory) {
+    function hydrateBlog(string[3] memory paths, string[4] memory colors) internal pure returns (string memory) {
         return string.concat(
+            '<g id="bg" opacity="0.4"><rect width="100" height="100" fill="',
+            colors[0],
+            '" />',
             '<path d="',
             paths[0],
             '" fill="',
-            colors[1],
+            colors[2],
             '" /><path d="',
             paths[1],
             '" fill="',
-            colors[2],
+            colors[3],
             '" /><path d="',
             paths[2],
             '" fill="',
-            colors[0],
-            '" />'
+            colors[1],
+            '" /></g>'
         );
     }
 
-    function background(uint256 dnaBgLayer) internal view returns (string memory) {
-        string[3] memory paths = [generatePath(68, 23, 2), generatePath(11, 70, 1), generatePath(38, 67, 0)];
-        string[3] memory colors = ["#27b4f6", "#D84B09", "#F67094"];
-        console2.log(hydrateBlog(paths, colors));
+    function background(
+        int256[6] memory backgroundShapeMatrix,
+        string[4] memory backgroundColorMatrix,
+        uint256 base
+    ) internal view returns (string memory) {
+        bool isPlain = base < 55;
+        bool isBiTone = base < 70;
+        bool isFullColor = base < 85;
+
+        string[3] memory paths = [
+            generatePath(
+                backgroundShapeMatrix[0], 
+                backgroundShapeMatrix[1], 
+                2
+            ), 
+            generatePath(
+                backgroundShapeMatrix[2], 
+                backgroundShapeMatrix[3], 
+                1
+            ), 
+            generatePath(
+                backgroundShapeMatrix[4], 
+                backgroundShapeMatrix[5], 
+                0
+            )];
+        
+        string[4] memory colors = isPlain ? [
+            backgroundColorMatrix[0],
+            backgroundColorMatrix[0],
+            backgroundColorMatrix[0],
+            backgroundColorMatrix[0]
+        ] : isBiTone ? [
+            backgroundColorMatrix[0],
+            backgroundColorMatrix[3],
+            backgroundColorMatrix[0],
+            backgroundColorMatrix[3]
+        ] : backgroundColorMatrix;
+        
         return hydrateBlog(paths, colors);
     }
 }
