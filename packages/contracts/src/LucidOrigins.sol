@@ -22,13 +22,29 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         uint16[] memory dna = getDna(uint256(keccak256(abi.encodePacked(tokenId))));
         string memory name = string.concat("LucidOrigins #", tokenId.toString());
-        string memory background = background(normalizeToRange(dna[Constants.BACKGROUND_INDEX], 0, 16));
+        int256[6] memory backgroundShapeMatrix = [
+            int256(normalizeToRange(dna[1], 0, 100)),
+            int256(normalizeToRange(dna[2], 0, 100)),
+            int256(normalizeToRange(dna[3], 0, 100)),
+            int256(normalizeToRange(dna[4], 0, 100)),
+            int256(normalizeToRange(dna[5], 0, 100)),
+            int256(normalizeToRange(dna[6], 0, 100))
+        ];
+        string[4] memory backgroundColorMatrix = [
+            colors[normalizeToRange(dna[1], 0, 71)],
+            colors[normalizeToRange(dna[2], 0, 71)],
+            colors[normalizeToRange(dna[3], 0, 71)],
+            colors[normalizeToRange(dna[4], 0, 71)]
+        ];
+
+        string memory background = background(backgroundShapeMatrix, backgroundColorMatrix, normalizeToRange(dna[Constants.BASE_INDEX], 0, 100));
 
         string memory layers = "";
+        uint256 layersLength = normalizeToRange(dna[Constants.BASE_INDEX], 2, 6);
         uint256 size = normalizeToRange(dna[Constants.SIZE_INDEX], 125, 135);
         string memory colorDefs;
         string memory fillColor;
-        for (uint256 i = 1; i <= 3; i++) {
+        for (uint256 i = 1; i <= layersLength; i++) {
             (colorDefs, fillColor) = resolveDefsAndFillColor(
                 normalizeToRange(dna[Constants.COLOR1_INDEX] * i, 0, 71),
                 normalizeToRange(dna[Constants.COLOR2_INDEX] * i, 0, 71),
@@ -49,7 +65,7 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             normalizeToRange(dna[Constants.EYE_PUPIL_RADIUS_INDEX], 0, 6),
             fillColor
         );
-        string memory svgContent = string.concat(layers, face, blush());
+        string memory svgContent = string.concat(layers, face, blush(normalizeToRange(dna[Constants.SIZE_INDEX], 2, layersLength)));
         uint256 rotation = normalizeToRange(dna[Constants.SIZE_INDEX], 0, 3);
         string memory svg = string.concat(
             '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">',
@@ -146,7 +162,6 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             );
 
         string memory fillColor = isPlain ? colors[color1] : "url(#linear-grad)";
-
         return (colorDefs, fillColor);
     }
 }
