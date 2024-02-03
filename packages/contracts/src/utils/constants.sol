@@ -22,5 +22,4 @@ library Constants {
 
     uint16 public constant COLOR1_INDEX = 18;
     uint16 public constant COLOR2_INDEX = 19;
-
 }

@@ -4,7 +4,7 @@ pragma solidity 0.8.23;
 import { ERC721A } from "ERC721A/ERC721A.sol";
 import { Encoder } from "./Encoder.sol";
 import { Owned } from "solmate/auth/Owned.sol";
-import { console2 } from "forge-std/console2.sol";
+// import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
 import { Face } from "./layers/Face.sol";
 import { Blush } from "./layers/Blush.sol";
@@ -65,7 +65,7 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             normalizeToRange(dna[Constants.EYE_PUPIL_RADIUS_INDEX], 0, 6),
             fillColor
         );
-        string memory svgContent = string.concat(layers, face, blush(normalizeToRange(dna[Constants.SIZE_INDEX], 2, layersLength).toString()));
+        string memory svgContent = string.concat(layers, face, blush(normalizeToRange(dna[Constants.SIZE_INDEX], 2, layersLength)));
         uint256 rotation = normalizeToRange(dna[Constants.SIZE_INDEX], 0, 3);
         string memory svg = string.concat(
             '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">',
@@ -162,7 +162,6 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             );
 
         string memory fillColor = isPlain ? colors[color1] : "url(#linear-grad)";
-
         return (colorDefs, fillColor);
     }
 }

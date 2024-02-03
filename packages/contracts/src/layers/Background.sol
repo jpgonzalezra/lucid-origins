@@ -70,10 +70,9 @@ contract Background {
         int256[6] memory backgroundShapeMatrix,
         string[4] memory backgroundColorMatrix,
         uint256 base
-    ) internal view returns (string memory) {
+    ) internal pure returns (string memory) {
         bool isPlain = base < 55;
         bool isBiTone = base < 70;
-        bool isFullColor = base < 85;
 
         string[3] memory paths = [
             generatePath(
