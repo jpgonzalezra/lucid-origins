@@ -37,10 +37,12 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             colors[normalizeToRange(dna[4], 0, 71)]
         ];
 
-        string memory background = background(backgroundShapeMatrix, backgroundColorMatrix, normalizeToRange(dna[Constants.BASE_INDEX], 0, 100));
+        string memory background = background(
+            backgroundShapeMatrix, backgroundColorMatrix, normalizeToRange(dna[Constants.BASE_INDEX], 0, 100)
+        );
 
         string memory layers = "";
-        uint256 layersLength = normalizeToRange(dna[Constants.BASE_INDEX], 2, 6);
+        uint256 layersLength = normalizeToRange(dna[Constants.BASE_INDEX], 2, 4);
         uint256 size = normalizeToRange(dna[Constants.SIZE_INDEX], 125, 135);
         string memory colorDefs;
         string memory fillColor;
@@ -56,7 +58,7 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             string memory path2 = createSvgPath(createPoints(size + 1, 50, 0, minGrowth, edgesNum));
             layers = string.concat(layers, build(i, colorDefs, fillColor, path1, path2));
             unchecked {
-                size = size - 30;
+                size = size - (size / layersLength);
             }
         }
         string memory face = face(
@@ -65,7 +67,8 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             normalizeToRange(dna[Constants.EYE_PUPIL_RADIUS_INDEX], 0, 6),
             fillColor
         );
-        string memory svgContent = string.concat(layers, face, blush(normalizeToRange(dna[Constants.SIZE_INDEX], 2, layersLength)));
+        string memory svgContent =
+            string.concat(layers, face, blush(normalizeToRange(dna[Constants.SIZE_INDEX], 2, layersLength)));
         uint256 rotation = normalizeToRange(dna[Constants.SIZE_INDEX], 0, 3);
         string memory svg = string.concat(
             '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="400" height="400">',
