@@ -21,7 +21,9 @@ contract LucidOriginsTest is PRBTest, StdCheats {
     }
 
     /// @dev Basic test. Run it with `forge test -vvv` to see the console log.
-    function test_Example() view external {
-        lucidOrigins.tokenURI(234);
+    function test_tokenUri() external view {
+        for (uint256 i = 0; i < 4844; i++) {
+            lucidOrigins.tokenURI(i);
+        }
     }
 }
