@@ -67,42 +67,29 @@ contract Background {
     }
 
     function background(
-        int256[6] memory backgroundShapeMatrix,
+        uint256[6] memory backgroundShapeMatrix,
         string[4] memory backgroundColorMatrix,
         uint256 base
-    ) internal pure returns (string memory) {
+    )
+        internal
+        pure
+        returns (string memory)
+    {
         bool isPlain = base < 55;
         bool isBiTone = base < 70;
 
         string[3] memory paths = [
-            generatePath(
-                backgroundShapeMatrix[0], 
-                backgroundShapeMatrix[1], 
-                2
-            ), 
-            generatePath(
-                backgroundShapeMatrix[2], 
-                backgroundShapeMatrix[3], 
-                1
-            ), 
-            generatePath(
-                backgroundShapeMatrix[4], 
-                backgroundShapeMatrix[5], 
-                0
-            )];
-        
-        string[4] memory colors = isPlain ? [
-            backgroundColorMatrix[0],
-            backgroundColorMatrix[0],
-            backgroundColorMatrix[0],
-            backgroundColorMatrix[0]
-        ] : isBiTone ? [
-            backgroundColorMatrix[0],
-            backgroundColorMatrix[3],
-            backgroundColorMatrix[0],
-            backgroundColorMatrix[3]
-        ] : backgroundColorMatrix;
-        
+            generatePath(int256(backgroundShapeMatrix[0]), int256(backgroundShapeMatrix[1]), 2),
+            generatePath(int256(backgroundShapeMatrix[2]), int256(backgroundShapeMatrix[3]), 1),
+            generatePath(int256(backgroundShapeMatrix[4]), int256(backgroundShapeMatrix[5]), 0)
+        ];
+
+        string[4] memory colors = isPlain
+            ? [backgroundColorMatrix[0], backgroundColorMatrix[0], backgroundColorMatrix[0], backgroundColorMatrix[0]]
+            : isBiTone
+                ? [backgroundColorMatrix[0], backgroundColorMatrix[3], backgroundColorMatrix[0], backgroundColorMatrix[3]]
+                : backgroundColorMatrix;
+
         return hydrateBlog(paths, colors);
     }
 }

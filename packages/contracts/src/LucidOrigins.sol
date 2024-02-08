@@ -4,7 +4,7 @@ pragma solidity 0.8.23;
 import { ERC721A } from "ERC721A/ERC721A.sol";
 import { Encoder } from "./Encoder.sol";
 import { Owned } from "solmate/auth/Owned.sol";
-// import { console2 } from "forge-std/console2.sol";
+import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
 import { Face } from "./layers/Face.sol";
 import { Blush } from "./layers/Blush.sol";
@@ -21,20 +21,22 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         uint16[] memory dna = getDna(uint256(keccak256(abi.encodePacked(tokenId))));
+
         string memory name = string.concat("LucidOrigins #", tokenId.toString());
-        int256[6] memory backgroundShapeMatrix = [
-            int256(normalizeToRange(dna[1], 0, 100)),
-            int256(normalizeToRange(dna[2], 0, 100)),
-            int256(normalizeToRange(dna[3], 0, 100)),
-            int256(normalizeToRange(dna[4], 0, 100)),
-            int256(normalizeToRange(dna[5], 0, 100)),
-            int256(normalizeToRange(dna[6], 0, 100))
+        uint256[6] memory backgroundShapeMatrix = [
+            normalizeToRange(dna[1], 0, 100),
+            normalizeToRange(dna[2], 0, 100),
+            normalizeToRange(dna[3], 0, 100),
+            normalizeToRange(dna[4], 0, 100),
+            normalizeToRange(dna[5], 0, 100),
+            normalizeToRange(dna[6], 0, 100)
         ];
+
         string[4] memory backgroundColorMatrix = [
-            colors[normalizeToRange(dna[1], 0, 71)],
-            colors[normalizeToRange(dna[2], 0, 71)],
-            colors[normalizeToRange(dna[3], 0, 71)],
-            colors[normalizeToRange(dna[4], 0, 71)]
+            colors[normalizeToRange(dna[1], 0, 70)],
+            colors[normalizeToRange(dna[2], 0, 70)],
+            colors[normalizeToRange(dna[3], 0, 70)],
+            colors[normalizeToRange(dna[4], 0, 70)]
         ];
 
         string memory background = background(
@@ -67,6 +69,7 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             normalizeToRange(dna[Constants.EYE_PUPIL_RADIUS_INDEX], 0, 6),
             fillColor
         );
+        console2.log("LLEGUE");
         string memory svgContent =
             string.concat(layers, face, blush(normalizeToRange(dna[Constants.SIZE_INDEX], 2, layersLength)));
         uint256 rotation = normalizeToRange(dna[Constants.SIZE_INDEX], 0, 3);

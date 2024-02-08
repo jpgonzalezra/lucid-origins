@@ -17,9 +17,8 @@ library Constants {
     uint16 public constant MIN_GROWTH_INDEX = 8;
     uint16 public constant EDGES_NUM_INDEX = 9;
 
-    uint16 public constant BASE_INDEX = 16;
-    uint16 public constant CHAR_ROTATION_INDEX = 17;
+    uint16 public constant BASE_INDEX = 10;
 
-    uint16 public constant COLOR1_INDEX = 18;
-    uint16 public constant COLOR2_INDEX = 19;
+    uint16 public constant COLOR1_INDEX = 11;
+    uint16 public constant COLOR2_INDEX = 12;
 }
