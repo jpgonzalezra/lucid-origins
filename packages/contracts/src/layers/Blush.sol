@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GNU GPLv3
 pragma solidity 0.8.23;
+
 import { LibString } from "solmate/utils/LibString.sol";
 
 contract Blush {

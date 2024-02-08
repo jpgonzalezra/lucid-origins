@@ -4,7 +4,6 @@ pragma solidity 0.8.23;
 // import { console2 } from "forge-std/console2.sol";
 import { LibString } from "solmate/utils/LibString.sol";
 import { Trigonometry } from "solidity-trigonometry/Trigonometry.sol";
-import { Constants } from "../utils/constants.sol";
 
 contract Blob {
     struct Point {

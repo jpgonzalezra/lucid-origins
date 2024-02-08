@@ -67,8 +67,8 @@ contract Background {
     }
 
     function background(
-        uint256[6] memory backgroundShapeMatrix,
-        string[4] memory backgroundColorMatrix,
+        uint256[6] memory bgShapeMatrix,
+        string[4] memory bgColorMatrix,
         uint256 base
     )
         internal
@@ -79,16 +79,14 @@ contract Background {
         bool isBiTone = base < 70;
 
         string[3] memory paths = [
-            generatePath(int256(backgroundShapeMatrix[0]), int256(backgroundShapeMatrix[1]), 2),
-            generatePath(int256(backgroundShapeMatrix[2]), int256(backgroundShapeMatrix[3]), 1),
-            generatePath(int256(backgroundShapeMatrix[4]), int256(backgroundShapeMatrix[5]), 0)
+            generatePath(int256(bgShapeMatrix[0]), int256(bgShapeMatrix[1]), 2),
+            generatePath(int256(bgShapeMatrix[2]), int256(bgShapeMatrix[3]), 1),
+            generatePath(int256(bgShapeMatrix[4]), int256(bgShapeMatrix[5]), 0)
         ];
 
         string[4] memory colors = isPlain
-            ? [backgroundColorMatrix[0], backgroundColorMatrix[0], backgroundColorMatrix[0], backgroundColorMatrix[0]]
-            : isBiTone
-                ? [backgroundColorMatrix[0], backgroundColorMatrix[3], backgroundColorMatrix[0], backgroundColorMatrix[3]]
-                : backgroundColorMatrix;
+            ? [bgColorMatrix[0], bgColorMatrix[0], bgColorMatrix[0], bgColorMatrix[0]]
+            : isBiTone ? [bgColorMatrix[0], bgColorMatrix[3], bgColorMatrix[0], bgColorMatrix[3]] : bgColorMatrix;
 
         return hydrateBlog(paths, colors);
     }
