@@ -4,7 +4,6 @@ pragma solidity 0.8.23;
 import { ERC721A } from "ERC721A/ERC721A.sol";
 import { Encoder } from "./Encoder.sol";
 import { Owned } from "solmate/auth/Owned.sol";
-import { console2 } from "forge-std/console2.sol";
 import { Background } from "./layers/Background.sol";
 import { Face } from "./layers/Face.sol";
 import { Blush } from "./layers/Blush.sol";
@@ -32,11 +31,12 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
             normalizeToRange(dna[6], 0, 100)
         ];
 
+        uint256 colorsLen = colors.length - 1;
         string[4] memory backgroundColorMatrix = [
-            colors[normalizeToRange(dna[1], 0, 70)],
-            colors[normalizeToRange(dna[2], 0, 70)],
-            colors[normalizeToRange(dna[3], 0, 70)],
-            colors[normalizeToRange(dna[4], 0, 70)]
+            colors[normalizeToRange(dna[1], 0, colorsLen)],
+            colors[normalizeToRange(dna[2], 0, colorsLen)],
+            colors[normalizeToRange(dna[3], 0, colorsLen)],
+            colors[normalizeToRange(dna[4], 0, colorsLen)]
         ];
 
         string memory background = background(
@@ -50,26 +50,30 @@ contract LucidOrigins is Owned, ERC721A, Background, Face, Blob, Blush, Colors {
         string memory fillColor;
         for (uint256 i = 1; i <= layersLength; i++) {
             (colorDefs, fillColor) = resolveDefsAndFillColor(
-                normalizeToRange(dna[Constants.COLOR1_INDEX] * i, 0, 71),
-                normalizeToRange(dna[Constants.COLOR2_INDEX] * i, 0, 71),
+                normalizeToRange(dna[Constants.COLOR1_INDEX] * i, 0, colorsLen),
+                normalizeToRange(dna[Constants.COLOR2_INDEX] * i, 0, colorsLen),
                 normalizeToRange(dna[Constants.BASE_INDEX] * i, 0, 100)
             );
+
             uint256 minGrowth = normalizeToRange(dna[Constants.MIN_GROWTH_INDEX] * i, 6, 9);
             uint256 edgesNum = normalizeToRange(dna[Constants.EDGES_NUM_INDEX] * i, 10, 15);
+
             string memory path1 = createSvgPath(createPoints(size, 50, 0, minGrowth, edgesNum));
             string memory path2 = createSvgPath(createPoints(size + 1, 50, 0, minGrowth, edgesNum));
+
             layers = string.concat(layers, build(i, colorDefs, fillColor, path1, path2));
             unchecked {
                 size = size - (size / layersLength);
             }
         }
+
         string memory face = face(
             normalizeToRange(dna[Constants.EYE_RADIUS_INDEX], 7, 7),
             normalizeToRange(dna[Constants.EYE_SEPARATION_INDEX], 20, 25),
             normalizeToRange(dna[Constants.EYE_PUPIL_RADIUS_INDEX], 0, 6),
             fillColor
         );
-        console2.log("LLEGUE");
+
         string memory svgContent =
             string.concat(layers, face, blush(normalizeToRange(dna[Constants.SIZE_INDEX], 2, layersLength)));
         uint256 rotation = normalizeToRange(dna[Constants.SIZE_INDEX], 0, 3);
